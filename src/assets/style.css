@@ -5,7 +5,7 @@
     --light-grey: #F5F5F5;
     --grey: #EDEDED;
     font-family: SF Pro Display;
-    font-size: 20px;
+    font-size: 18px;
 }
 
 body{
@@ -17,7 +17,6 @@ body{
     background: linear-gradient(to bottom, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.2));
     border-radius: 100px;
     margin: 0 5%;
-    margin-top: -6%;
     height: 75px;
     width: 90%;
     display: flex;
@@ -25,6 +24,8 @@ body{
     backdrop-filter: blur(15px);
     box-shadow: 0px 4px 24px -1px rgba(0, 0, 0, 0.25);
     position: fixed;
+    top: 25px;
+    font-size: 20px;
 }
 
 .navbar ul {
@@ -41,9 +42,28 @@ body{
     text-decoration: none;
 }
 
+/*CARD*/
+.card {
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.2));
+    border-radius: 25px;
+    padding: 10px 30px;
+    box-shadow: 0px 4px 24px -1px rgba(0, 0, 0, 0.25);
+}
+
 /*HOMEPAGE*/
 .home-page {
-    margin-top: 7%;
+    margin: 12%;
+    margin-top: 130px;
+}
+
+.title {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.home-page img {
+    height: 400px;
 }
 
 .background-glow {

@@ -9,7 +9,7 @@ app.layout = html.Div([
     dcc.Location(id='url', refresh=False),
     html.Div(className="background-glow"),
     create_navbar(),
-    html.Div(id='page-content', className="page-wrapper")
+    html.Div(id='page-content')
 ])
 
 @app.callback(
