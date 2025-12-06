@@ -7,7 +7,6 @@ app = Dash(__name__, suppress_callback_exceptions=True, assets_folder="src/asset
 
 app.layout = html.Div([
     dcc.Location(id='url', refresh=False),
-    html.Div(className="background-glow"),
     create_navbar(),
     html.Div(id='page-content')
 ])

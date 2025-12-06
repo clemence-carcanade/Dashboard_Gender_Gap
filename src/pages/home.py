@@ -6,6 +6,30 @@ def layout():
         className="home-page",
         children=[
             html.Div(
+                className="background-glow",
+                style={
+                    "--color": "var(--pink)",
+                    "--top": "60px",
+                    "--right": "550px"
+                }
+            ),
+            html.Div(
+                className="background-glow",
+                style={
+                    "--color": "var(--pink)",
+                    "--top": "350px",
+                    "--left": "50px"
+                }
+            ),
+            html.Div(
+                className="background-glow",
+                style={
+                    "--color": "var(--blue)",
+                    "--top": "500px",
+                    "--right": "450px"
+                }
+            ),
+            html.Div(
                 className="title",
                 children=[
                     create_card(
@@ -18,6 +42,29 @@ def layout():
                         className="gender-image",
                         alt="gender_equality_balance"
                     )
+                ]
+            ),
+            html.Div(
+                className="quote",
+                children=[
+                    create_card(
+                        html.Img(
+                            src="/assets/images/undp.jpg",
+                            className="undp-logo",
+                            alt="undp_logo"
+                        ),
+                        html.H3(
+                            className="h3_normal",
+                            children=[
+                                "“",
+                                html.I(
+                                    "GII is a composite metric of gender inequality using three dimensions: reproductive health, empowerment and the labour market. "
+                                    "A low GII value indicates low inequality between women and men, and vice-versa."
+                                ),
+                                "” UNDP"
+                            ]
+                        )
+                    ),
                 ]
             ),
         ]

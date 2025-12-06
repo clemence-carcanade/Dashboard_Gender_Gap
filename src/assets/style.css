@@ -4,6 +4,7 @@
     --pink: #EDA1CE;
     --light-grey: #F5F5F5;
     --grey: #EDEDED;
+    --blue: #5992E3;
     font-family: SF Pro Display;
     font-size: 18px;
 }
@@ -54,6 +55,9 @@ body{
 .home-page {
     margin: 12%;
     margin-top: 130px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
 }
 
 .title {
@@ -62,18 +66,36 @@ body{
     gap: 30px;
 }
 
-.home-page img {
+.title img {
     height: 400px;
+}
+
+.quote .card {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    padding: 20px 30px;
+}
+
+.quote img {
+    height: 100px;
+    border-radius: 100%;
+}
+
+.h3_normal {
+    font-size: 20px;
 }
 
 .background-glow {
     position: absolute;
-    top: 60px;
-    right: 550px;
     width: 360px;
     height: 230px;
-    background: var(--pink);
     border-radius: 50%;
     filter: blur(50px);
     z-index: -1;
+
+    background: var(--color, --pink);
+    top: var(--top, auto);
+    right: var(--right, auto);
+    left: var(--left, auto);
 }
