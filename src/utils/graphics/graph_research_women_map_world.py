@@ -9,11 +9,10 @@ import pandas as pd
 #Travail préalable : Recherche des données manquantes 
 #Recherche de données manquante pour des pays 
 df = pd.read_csv("../../../data/raw/world_research_women.csv")
-world = gpd.read_file("../../../data/raw/world_boundaries.geojson")
-with open("../../../data/raw/world_boundaries.geojson") as f:
+world = gpd.read_file("../../../data/raw/countries.geojson")
+with open("../../../data/raw/countries.geojson") as f:
     world_geojson = json.load(f)
 
-print(world[['name','iso3']].head(20))
 #Filtrer les regions /groupes pour qu'il n'y ait que des codes de pays
 # Liste des préfixes à exclure
 regional_prefixes = ['SDG:', 'UIS:', 'MDG:', 'WB:', 'UNESCO:']
@@ -26,14 +25,14 @@ def is_regional_code(code):
 df_countries = df[~df['geoUnit'].apply(is_regional_code)] #donner par IA
 
 gii_codes = set(df_countries['geoUnit'].unique())
-geo_codes = set(world['iso3'].unique())
+geo_codes = set(world['ISO3166-1-Alpha-3'].unique())
 
 #On veut afficher les noms des pays donc on prends les nom sur le geojson puisque non present sur le fichier csv
 #print("Colonnes du GeoJSON :", world.columns.tolist())
 df_countries = df_countries.merge(
-    world[['iso3', 'name']],
+    world[['ISO3166-1-Alpha-3', 'name']],
     left_on='geoUnit',
-    right_on='iso3',
+    right_on='ISO3166-1-Alpha-3',
     how='left'
 ).rename(columns={'name': 'Country'})
 
@@ -94,14 +93,14 @@ def update_map(selected_year):
     # Merge à l'intérieur du callback
     merged_df = world.merge(
         df_year,
-        left_on='iso3',
+        left_on='ISO3166-1-Alpha-3',
         right_on='geoUnit',
         how='outer'
     )
     print(merged_df.columns)
     #Code pour grisé les pays non reconnu -- > difficulté donc sollicite l'IA
-    # si la colonne 'ISO3' existe (données), on la prend, sinon on prend 'iso3' du GeoDataFrame
-    merged_df['plot_iso'] = merged_df['geoUnit'].fillna(merged_df['iso3_x'])
+    # si la colonne 'ISO3' existe (données), on la prend, sinon on prend 'ISO_A3' du GeoDataFrame
+    merged_df['plot_iso'] = merged_df['geoUnit'].fillna(merged_df['ISO3166-1-Alpha-3_x'])
     #skipna=on ignore les NaN et on cherche la plus petite valeur du GII 
     #afin de plus tard créer une valeur artificielle encore plus petite pour faire apparaître les pays grisé
     #même principe pour les valeurs max
@@ -133,7 +132,7 @@ def update_map(selected_year):
             'plot_iso': False,      # Cache le code ISO
             'value_plot': ':.3f'    # Affiche la valeur avec 3 décimales
         },
-        featureidkey='properties.iso3',
+        featureidkey='properties.ISO3166-1-Alpha-3',
         projection='natural earth',
         color_continuous_scale=colorscale_with_grey,
         )
