@@ -51,6 +51,21 @@ body{
     box-shadow: 0px 4px 24px -1px rgba(0, 0, 0, 0.25);
 }
 
+/*GLOW BACKGROUND*/
+.background-glow {
+    position: absolute;
+    width: 360px;
+    height: 230px;
+    border-radius: 50%;
+    filter: blur(50px);
+    z-index: -1;
+
+    background: var(--color, --pink);
+    top: var(--top, auto);
+    right: var(--right, auto);
+    left: var(--left, auto);
+}
+
 /*HOMEPAGE*/
 .home-page {
     margin: 12%;
@@ -86,16 +101,37 @@ body{
     font-size: 20px;
 }
 
-.background-glow {
-    position: absolute;
-    width: 360px;
-    height: 230px;
-    border-radius: 50%;
-    filter: blur(50px);
-    z-index: -1;
+/*SEGMENTED CONTROL*/
+.segmented_control {
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.2));
+    padding: 10px;
+    border-radius: 100px;
+    box-shadow: 0px 4px 24px -1px rgba(0, 0, 0, 0.25);
+    width: fit-content;
+    margin: 0 auto;
+}
 
-    background: var(--color, --pink);
-    top: var(--top, auto);
-    right: var(--right, auto);
-    left: var(--left, auto);
+.segmented_control .radio_group {
+    display: flex;
+    gap: 10px;
+}
+
+.segmented_control input {
+    display: none;
+}
+
+.segmented_control label {
+    padding: 10px;
+    border-radius: 100px;
+    transition: all 0.3s ease 0s;
+}
+
+.segmented_control label:hover {
+    cursor: pointer;
+    background-color: var(--grey);
+}
+
+.segmented_control label:has(input:checked) {
+    background-color: var(--pink);
+    color: white;
 }
