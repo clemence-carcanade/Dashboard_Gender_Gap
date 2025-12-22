@@ -123,7 +123,7 @@ def update_map(selected_year):
         merged_df,
         geojson=world_geojson,
         locations='plot_iso',            # colonne contenant les ISO valides pour tous les pays et ne prends donc plus en compte les NaN
-        color='GII_plot',
+        color='GII_plot',   
         hover_name='Country',
         featureidkey='properties.iso3',
         projection='natural earth',
