@@ -135,3 +135,19 @@ body{
     background-color: var(--pink);
     color: white;
 }
+
+Button{
+    background-color: var(--light-grey);
+    border-radius: 100%;
+    height: 40px;
+    width: 40px;
+    border: None;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+Button:hover{
+    background-color: var(--grey);
+}

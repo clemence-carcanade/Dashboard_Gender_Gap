@@ -1,6 +1,7 @@
 from dash import html
 from src.components.card import create_card
 from src.components.segmented_control import create_segmented_control
+from src.charts.gii_world_map import layout as gii_map_layout
 
 def layout():
     return html.Div(
@@ -71,5 +72,6 @@ def layout():
             create_segmented_control(
                 options=["Gender Inequality Index", "Women's Share in Research"],
             ),
+            gii_map_layout(),
         ]
     )
