@@ -2,7 +2,6 @@ import json
 import pandas as pd
 import geopandas as gpd
 import plotly.express as px
-import dash
 from dash import html, dcc, callback
 from dash.dependencies import Input, Output, State
 
@@ -74,32 +73,51 @@ figs_by_year = {y: create_choropleth(merged_df[merged_df["Year"] == y]) for y in
 
 def layout():
     return html.Div(
-        className="gii_map_container",
+        className="gii_container",
         children=[
-            dcc.Graph(
-                id="gii_map",
-                figure=fig,
-                config={"displayModeBar": False},
+            html.Div(
+                className="gii_map_container",
+                children=[
+                    dcc.Graph(
+                        id="gii_map",
+                        figure=fig,
+                        config={"displayModeBar": False},
+                    ),
+                    html.Div(
+                        className="slider_container",
+                        children=[
+                            html.Button("▶", id="play_pause_button", n_clicks=0),
+                            dcc.Interval(
+                                id="interval",
+                                interval=500,
+                                n_intervals=0,
+                                disabled=False
+                            ),
+                            dcc.Slider(
+                                id="gii_slider",
+                                min=int(years[0]),
+                                max=int(years[-1]),
+                                step=1,
+                                value=int(years[-1]),
+                                marks={
+                                    int(years[0]): str(years[0]),
+                                    int(years[-1]): str(years[-1]),
+                                },
+                                tooltip={
+                                    "placement": "bottom",
+                                    "always_visible": False
+                                },
+                            )
+                        ]
+                    )
+                ]
             ),
             html.Div(
-                className="slider",
+                className="ranking_container",
                 children=[
-                    dcc.Slider(
-                        id="gii_slider",
-                        min=int(years[0]),
-                        max=int(years[-1]),
-                        step=1,
-                        value=int(years[-1]),
-                        marks={int(y): str(y) for y in years},
-                        tooltip={"placement": "bottom", "always_visible": True},
-                    ),
-                    html.Button("▶", id="play_pause_button", n_clicks=0),
-                    dcc.Interval(
-                        id="interval",
-                        interval=500,
-                        n_intervals=0,
-                        disabled=False
-                    )
+                    html.H3("Leading Countries in Gender Equality"),
+                    html.Span(id="year_rank", className="year_rank"),
+                    html.Ul(id="gii_ranking", className="ranking_list")
                 ]
             )
         ]
@@ -135,3 +153,49 @@ def update_slider(n_intervals, current_year):
     if idx + 1 >= len(years):
         return years[0]
     return years[idx + 1]
+
+@callback(
+    Output("gii_ranking", "children"),
+    Input("gii_slider", "value")
+)
+def update_ranking(year_selected):
+    df_year = (
+        merged_df[
+            (merged_df["Year"] == year_selected) &
+            (merged_df["GII"].notna())
+        ]
+        .sort_values("GII", ascending=True)
+        .head(10)
+        .reset_index(drop=True)
+    )
+
+    return [
+        html.Li(
+            className="ranking_item",
+            children=[
+                html.Span(f"{i+1}.", className="ranking_rank"),
+                html.Span(row.Country, className="ranking_country"),
+                html.Span(f"{row.GII:.3f}", className="ranking_value"),
+            ]
+        )
+        for i, row in df_year.iterrows()
+    ]
+
+@callback(
+    Output("year_rank", "children"),
+    Input("gii_slider", "value")
+)
+def update_year_rank(year_selected):
+    return f"{year_selected}"
+
+
+@callback(
+    Output("gii_slider", "marks"),
+    Input("gii_slider", "value"),
+)
+def update_slider_marks(current_year):
+    return {
+        int(years[0]): str(years[0]),
+        int(years[-1]): str(years[-1]),
+        int(current_year): str(current_year),
+    }
