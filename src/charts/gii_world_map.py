@@ -36,7 +36,7 @@ sentinel = real_min - (abs(real_min) * 0.1 + 0.01)
 merged_df["GII_plot"] = merged_df["GII"].fillna(sentinel)
 
 colorscale = [
-    [0.0, "#F5F5F5"],
+    [0.0, "#EDEDED"],
     [0.00001, "#FBEAF4"],
     [0.1, "#F4C3E0"],
     [0.2, "#EDA1CE"],
@@ -63,7 +63,7 @@ def create_choropleth(df_year):
         color_continuous_scale=colorscale,
         range_color=(zmin, zmax)
     )
-    fig.update_traces(marker_line_color="#EDEDED", marker_line_width=0.9)
+    fig.update_traces(marker_line_color="#DDDDDD", marker_line_width=0.9)
     fig.update_geos(fitbounds="locations", visible=False)
     fig.update_layout(margin=dict(l=0, r=0, t=0, b=0), coloraxis_colorbar=dict(title="GII"))
     return fig
@@ -73,51 +73,38 @@ figs_by_year = {y: create_choropleth(merged_df[merged_df["Year"] == y]) for y in
 
 def layout():
     return html.Div(
-        className="gii_container",
+        className="gii_data_container",  # Enlevez le wrapper gii_container
         children=[
-            html.Div(
-                className="gii_map_container",
-                children=[
-                    dcc.Graph(
-                        id="gii_map",
-                        figure=fig,
-                        config={"displayModeBar": False},
-                    ),
-                    html.Div(
-                        className="slider_container",
-                        children=[
-                            html.Button("▶", id="play_pause_button", n_clicks=0),
-                            dcc.Interval(
-                                id="interval",
-                                interval=500,
-                                n_intervals=0,
-                                disabled=False
-                            ),
-                            dcc.Slider(
-                                id="gii_slider",
-                                min=int(years[0]),
-                                max=int(years[-1]),
-                                step=1,
-                                value=int(years[-1]),
-                                marks={
-                                    int(years[0]): str(years[0]),
-                                    int(years[-1]): str(years[-1]),
-                                },
-                                tooltip={
-                                    "placement": "bottom",
-                                    "always_visible": False
-                                },
-                            )
-                        ]
-                    )
-                ]
+            dcc.Graph(
+                id="gii_map",
+                figure=fig,
+                config={"displayModeBar": False, "responsive": True},
             ),
             html.Div(
-                className="ranking_container",
+                className="slider_container",
                 children=[
-                    html.H3("Leading Countries in Gender Equality"),
-                    html.Span(id="year_rank", className="year_rank"),
-                    html.Ul(id="gii_ranking", className="ranking_list")
+                    html.Button("▶", id="play_pause_button", n_clicks=0),
+                    dcc.Interval(
+                        id="interval",
+                        interval=500,
+                        n_intervals=0,
+                        disabled=False
+                    ),
+                    dcc.Slider(
+                        id="gii_slider",
+                        min=int(years[0]),
+                        max=int(years[-1]),
+                        step=1,
+                        value=int(years[-1]),
+                        marks={
+                            int(years[0]): str(years[0]),
+                            int(years[-1]): str(years[-1]),
+                        },
+                        tooltip={
+                            "placement": "bottom",
+                            "always_visible": False
+                        },
+                    )
                 ]
             )
         ]
@@ -153,41 +140,6 @@ def update_slider(n_intervals, current_year):
     if idx + 1 >= len(years):
         return years[0]
     return years[idx + 1]
-
-@callback(
-    Output("gii_ranking", "children"),
-    Input("gii_slider", "value")
-)
-def update_ranking(year_selected):
-    df_year = (
-        merged_df[
-            (merged_df["Year"] == year_selected) &
-            (merged_df["GII"].notna())
-        ]
-        .sort_values("GII", ascending=True)
-        .head(10)
-        .reset_index(drop=True)
-    )
-
-    return [
-        html.Li(
-            className="ranking_item",
-            children=[
-                html.Span(f"{i+1}.", className="ranking_rank"),
-                html.Span(row.Country, className="ranking_country"),
-                html.Span(f"{row.GII:.3f}", className="ranking_value"),
-            ]
-        )
-        for i, row in df_year.iterrows()
-    ]
-
-@callback(
-    Output("year_rank", "children"),
-    Input("gii_slider", "value")
-)
-def update_year_rank(year_selected):
-    return f"{year_selected}"
-
 
 @callback(
     Output("gii_slider", "marks"),

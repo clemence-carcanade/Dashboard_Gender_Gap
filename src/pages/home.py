@@ -2,6 +2,8 @@ from dash import html
 from src.components.card import create_card
 from src.components.segmented_control import create_segmented_control
 from src.charts.gii_world_map import layout as gii_map_layout
+from src.charts.gii_board import layout as gii_board_layout
+from src.charts.gii_histogram import layout as gii_bar_layout
 
 def layout():
     return html.Div(
@@ -71,7 +73,26 @@ def layout():
             ),
             create_segmented_control(
                 options=["Gender Inequality Index", "Women's Share in Research"],
+                className="segmented_control",
+                id="data_selector"
             ),
-            gii_map_layout(),
+            html.Div(
+                className="world_analysis",
+                children=[
+                    create_segmented_control(
+                        options=["🌍 Map", "📊 Bars"],
+                        className="segmented_control small",
+                        id="view_selector"
+                    ),
+                    html.Div(
+                        className="gii_container",
+                        id="gii_container",
+                        children=[
+                            gii_map_layout(),
+                            gii_board_layout(),
+                        ]
+                    ),
+                ]
+            )
         ]
     )

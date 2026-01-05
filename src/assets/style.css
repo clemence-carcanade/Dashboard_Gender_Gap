@@ -112,9 +112,22 @@ body{
     margin: 0 auto;
 }
 
+.segmented_control.small {
+    padding: 5px;
+    border-radius: 15px;
+    position: absolute;
+    z-index: 5;
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
 .segmented_control .radio_group {
     display: flex;
     gap: 10px;
+}
+
+.segmented_control.small .radio_group {
+    gap: 5px;
 }
 
 .segmented_control input {
@@ -127,6 +140,11 @@ body{
     transition: all 0.3s ease 0s;
 }
 
+.segmented_control.small label {
+    padding: 5px;
+    border-radius: 10px;
+}
+
 .segmented_control label:hover {
     cursor: pointer;
     background-color: var(--grey);
@@ -137,7 +155,7 @@ body{
     color: white;
 }
 
-/*GII_MAP*/
+/*GII_DATA*/
 Button{
     background-color: var(--light-grey);
     border-radius: 100%;
@@ -157,14 +175,21 @@ Button:hover{
 .gii_container{
     display: grid;
     grid-template-columns: 3fr 1fr;
-    align-items: flex-start;
-    grid-gap:30px;
+    grid-gap: 20px;
 }
 
-.gii_map_container{
+.gii_data_container{
     border-radius: 25px;
     box-shadow: 0px 4px 24px -1px rgba(0, 0, 0, 0.25);
     padding: 10px;
+    min-width: 0;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    gap: 10px;
+}
+
+#gii_map {
+    min-height: 470px;
 }
 
 .slider_container {
@@ -177,6 +202,12 @@ Button:hover{
     flex: 1;
 }
 
+.ranking_container{
+    border-radius: 25px;
+    box-shadow: 0px 4px 24px -1px rgba(0, 0, 0, 0.25);
+    padding: 10px;
+}
+
 .ranking_container H3 {
     text-align: center;
 }
@@ -185,14 +216,6 @@ Button:hover{
     display: flex;
     justify-content: center;
     margin-top: -15px;
-}
-
-.ranking_container{
-    border-radius: 25px;
-    box-shadow: 0px 4px 24px -1px rgba(0, 0, 0, 0.25);
-    padding: 10px;
-    width: 100%;
-    height: 92%;
 }
 
 .ranking_list {
