@@ -121,6 +121,11 @@ body{
     margin-left: 10px;
 }
 
+.segmented_control.small.middle {
+    margin-top: 0px;
+    justify-self: center;
+}
+
 .segmented_control .radio_group {
     display: flex;
     gap: 10px;
@@ -189,6 +194,10 @@ Button:hover{
 }
 
 #gii_map {
+    min-height: 470px;
+}
+
+#gii_histogram {
     min-height: 470px;
 }
 

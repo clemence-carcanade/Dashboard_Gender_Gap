@@ -1,6 +1,8 @@
 import plotly.express as px
 from dash import Input, Output, html, dcc, callback
 import pandas as pd
+from src.charts.gii_slider import create_gii_slider
+from src.components.segmented_control import create_segmented_control
 
 df = pd.read_csv("data/raw/world_GII.csv")
 
@@ -31,76 +33,81 @@ colorscale = [
     [1.0, "#631343"],
 ]
 
+zmin = df_long["GII"].min()
+zmax = df_long["GII"].max()
+
 def layout():
     return html.Div(
         className="gii_data_container",
         children=[
-        html.Label(
-            "Sélectionnez une année et un continent :",
-            style={
-                "font-size": "24px",
-                "font-weight": "600",
-                "color": "#410919",
-                "margin-bottom": "15px",
-                "letter-spacing": "0.5px"
+        create_segmented_control(
+                className="segmented_control small middle",
+                id="continent_selector",
+                options=continent,
+            ),
+        dcc.Graph(
+            id='gii_histogram',
+            config={
+                "displayModeBar": False,
+                "responsive": True
             }
         ),
-
-        dcc.Dropdown(
-            id='year-dropdown',
-            options=[{"label": str(y), "value": y} for y in years],
-            value=2021,
-            clearable=False,
-            searchable=False,
-            style={
-                "font-size": "20px",
-                "font-weight": "500",
-                "color": "#590d22",
-                "margin-bottom": "10px",
-                "border-left": "4px solid #590d22",
-                "padding-left": "12px"
-            }
-        ),
-
-        dcc.Dropdown(
-            id='continent-dropdown',
-            options=[{"label": str(y), "value": y} for y in continent],
-            value="All",
-            clearable=False,
-            searchable=False,
-            style={
-                "font-size": "20px",
-                "font-weight": "500",
-                "color": "#590d22",
-                "margin-bottom": "10px",
-                "border-left": "4px solid #590d22",
-                "padding-left": "12px"
-            }
-        ),
-
-        dcc.Graph(id='histogram'),
+        create_gii_slider(years),
     ])
 
 @callback(
-    Output('histogram', 'figure'),
-    [Input('year-dropdown', 'value'), Input('continent-dropdown', 'value')]
+    Output('gii_histogram', 'figure'),
+    [Input('gii_slider', 'value'), Input('continent_selector', 'value')]
 )
 def update_map(selected_year, selected_continent):
-    df_filtre= df_long[df_long["Year"] == selected_year]
+    df_filtre = df_long[df_long["Year"] == selected_year].copy()
+    
     if selected_continent != "All":
         df_filtre = df_filtre[df_filtre["Continent"] == selected_continent]
+        df_filtre["Country_short"] = df_filtre["Country"].str.slice(0, 8)
+        x_col = 'Country_short'
+    else:
+        x_col = 'Country'
+    
     fig = px.bar(
         df_filtre,
-        x='Country',
+        x=x_col,
         y='GII',
-        labels={'GII': 'GII', 'Country': 'Pays'},
+        labels={'GII': 'GII', "Country": 'Countries', "Country_short": "Countries"},
         color='GII',
         color_continuous_scale=colorscale,
-        hover_data=['Continent']
-        )
+        hover_data={
+            "Country": True,
+            "GII": True,
+            x_col: False
+        },
+        range_color=(zmin, zmax),
+        custom_data=['Country']
+    )
+    
+    fig.update_traces(
+        hovertemplate='<b>%{customdata[0]}</b><br>GII: %{y}<extra></extra>'
+    )
+    
     fig.update_layout(
         xaxis_tickangle=-45,
-        height=600,
-        showlegend=False
+        yaxis=dict(range=[0, zmax]),
+        plot_bgcolor="rgba(0,0,0,0)",
+        coloraxis_colorbar=dict(len=1.5),
+        font=dict(family="SF Pro Display"),
     )
-    return fig 
+    
+    fig.update_yaxes(
+        showgrid=True,
+        gridcolor="#DDDDDD",
+    )
+    
+    if selected_continent == "All":
+        fig.update_xaxes(
+            showticklabels=False,
+            title="Countries"
+        )
+    else:
+        fig.update_xaxes(title=None)
+    
+    return fig

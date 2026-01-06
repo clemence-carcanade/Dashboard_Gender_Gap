@@ -4,6 +4,8 @@ import geopandas as gpd
 import plotly.express as px
 from dash import html, dcc, callback
 from dash.dependencies import Input, Output, State
+from src.charts.gii_slider import create_gii_slider
+from src.components.segmented_control import create_segmented_control
 
 df = pd.read_csv("data/raw/world_GII.csv")
 world = gpd.read_file("data/cleaned/world_boundaries_simplified.geojson")
@@ -73,81 +75,34 @@ figs_by_year = {y: create_choropleth(merged_df[merged_df["Year"] == y]) for y in
 
 def layout():
     return html.Div(
-        className="gii_data_container",  # Enlevez le wrapper gii_container
+        className="gii_data_container",
         children=[
+            create_segmented_control(
+                className="segmented_control small middle",
+                id="earth_selector",
+                options=["Plan", "Globe"]
+            ),
             dcc.Graph(
                 id="gii_map",
                 figure=fig,
                 config={"displayModeBar": False, "responsive": True},
             ),
-            html.Div(
-                className="slider_container",
-                children=[
-                    html.Button("▶", id="play_pause_button", n_clicks=0),
-                    dcc.Interval(
-                        id="interval",
-                        interval=500,
-                        n_intervals=0,
-                        disabled=False
-                    ),
-                    dcc.Slider(
-                        id="gii_slider",
-                        min=int(years[0]),
-                        max=int(years[-1]),
-                        step=1,
-                        value=int(years[-1]),
-                        marks={
-                            int(years[0]): str(years[0]),
-                            int(years[-1]): str(years[-1]),
-                        },
-                        tooltip={
-                            "placement": "bottom",
-                            "always_visible": False
-                        },
-                    )
-                ]
-            )
+            create_gii_slider(years),
         ]
     )
 
-@callback(
-    Output("interval", "disabled"),
-    Output("play_pause_button", "children"),
-    Input("play_pause_button", "n_clicks"),
-    State("interval", "disabled")
-)
-def toggle_play_pause(n_clicks, disabled):
-    if n_clicks is None:
-        return True, "▶"
-    new_disabled = not disabled
-    new_label = "⏸" if not new_disabled else "▶"
-    return new_disabled, new_label
+from dash.dependencies import Input, Output
 
 @callback(
     Output("gii_map", "figure"),
-    Input("gii_slider", "value")
-)
-def update_map(year_selected):
-    return figs_by_year[year_selected]
-
-@callback(
-    Output("gii_slider", "value"),
-    Input("interval", "n_intervals"),
-    State("gii_slider", "value")
-)
-def update_slider(n_intervals, current_year):
-    idx = years.index(current_year)
-    if idx + 1 >= len(years):
-        return years[0]
-    return years[idx + 1]
-
-@callback(
-    Output("gii_slider", "marks"),
     Input("gii_slider", "value"),
+    Input("earth_selector", "value")
 )
-def update_slider_marks(current_year):
-    return {
-        int(years[0]): str(years[0]),
-        int(years[-1]): str(years[-1]),
-        int(current_year): str(current_year),
-    }
+def update_map_and_projection(year_selected, earth_selected):
+    fig = figs_by_year[year_selected]
+    if earth_selected == "Plan":
+        fig.update_geos(projection_type="natural earth")
+    else:
+        fig.update_geos(projection_type="orthographic")
+
+    return fig
