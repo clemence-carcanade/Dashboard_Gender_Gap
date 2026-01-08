@@ -41,8 +41,8 @@ def create_gii_slider(years_list):
     State("interval", "disabled")
 )
 def toggle_play_pause(n_clicks, disabled):
-    if n_clicks == 0:  # Changez de None à 0
-        return True, "▶"  # État initial
+    if n_clicks == 0:
+        return True, "▶"
     new_disabled = not disabled
     new_label = "⏸" if not new_disabled else "▶"
     return new_disabled, new_label
