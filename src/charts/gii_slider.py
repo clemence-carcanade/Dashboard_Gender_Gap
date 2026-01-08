@@ -2,7 +2,7 @@ from dash import html, dcc, callback, Output, Input, State
 
 years = []
 
-def create_gii_slider(years_list):
+def create_gii_slider(years_list, id):
     global years
     years = years_list
     
@@ -17,7 +17,7 @@ def create_gii_slider(years_list):
                 disabled=True
             ),
             dcc.Slider(
-                id="gii_slider",
+                id=id,
                 min=int(years[0]),
                 max=int(years[-1]),
                 step=1,

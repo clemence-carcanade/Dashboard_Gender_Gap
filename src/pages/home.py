@@ -3,7 +3,8 @@ from src.components.card import create_card
 from src.components.segmented_control import create_segmented_control
 from src.charts.gii_world_map import layout as gii_map_layout
 from src.charts.gii_board import layout as gii_board_layout
-from src.charts.gii_histogram import layout as gii_bar_layout
+from src.charts.stem_histogram import layout as stem_bars_layout
+from src.charts.stem_world_map import layout as stem_map_layout
 
 def layout():
     return html.Div(
@@ -93,6 +94,8 @@ def layout():
                         ]
                     ),
                 ]
-            )
+            ),
+            stem_bars_layout(),
+            stem_map_layout(),
         ]
     )

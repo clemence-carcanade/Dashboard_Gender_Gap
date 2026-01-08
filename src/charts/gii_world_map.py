@@ -25,16 +25,23 @@ df_long = df.melt(
 df_long["Year"] = df_long["Year"].str.extract(r"(\d{4})").astype(int)
 years = sorted(df_long["Year"].unique())
 
-merged_df = world.merge(
+all_countries = world[['iso3']].copy()
+all_years = pd.DataFrame({'Year': years})
+all_combinations = all_countries.merge(all_years, how='cross')
+
+merged_df = all_combinations.merge(
     df_long,
-    left_on="iso3",
-    right_on="ISO3",
-    how="outer"
+    left_on=['iso3', 'Year'],
+    right_on=['ISO3', 'Year'],
+    how='left'
 )
-merged_df["plot_iso"] = merged_df["ISO3"].fillna(merged_df["iso3"])
+
+merged_df['ISO3'] = merged_df['ISO3'].fillna(merged_df['iso3'])
+merged_df['plot_iso'] = merged_df['ISO3']
 
 real_min = df_long["GII"].min(skipna=True)
 sentinel = real_min - (abs(real_min) * 0.1 + 0.01)
+
 merged_df["GII_plot"] = merged_df["GII"].fillna(sentinel)
 
 colorscale = [
@@ -70,7 +77,6 @@ def create_choropleth(df_year):
     fig.update_layout(margin=dict(l=0, r=0, t=0, b=0), coloraxis_colorbar=dict(title="GII"))
     return fig
 
-fig = create_choropleth(merged_df[merged_df["Year"] == years[0]])
 figs_by_year = {y: create_choropleth(merged_df[merged_df["Year"] == y]) for y in years}
 
 def layout():
@@ -84,14 +90,12 @@ def layout():
             ),
             dcc.Graph(
                 id="gii_map",
-                figure=fig,
+                figure=figs_by_year[years[0]],
                 config={"displayModeBar": False, "responsive": True},
             ),
-            create_gii_slider(years),
+            create_gii_slider(years, "gii_slider"),
         ]
     )
-
-from dash.dependencies import Input, Output
 
 @callback(
     Output("gii_map", "figure"),

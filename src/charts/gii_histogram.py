@@ -21,7 +21,7 @@ years = sorted(df_long["Year"].unique())
 continent = ["All"] + sorted(df_long["Continent"].dropna().unique())
 
 colorscale = [
-    [0.0, "#F5F5F5"],
+    [0.0, "#EDEDED"],
     [0.00001, "#FBEAF4"],
     [0.1, "#F4C3E0"],
     [0.2, "#EDA1CE"],
@@ -52,7 +52,7 @@ def layout():
                 "responsive": True
             }
         ),
-        create_gii_slider(years),
+        create_gii_slider(years, "gii_slider"),
     ])
 
 @callback(
