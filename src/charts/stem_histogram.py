@@ -27,9 +27,12 @@ colorscale = [
     [1.0, "#0A1F3D"],
 ]
 
+zmin = df[VALUE_COL].min()
+zmax = df[VALUE_COL].max()
+
 def layout():
     return html.Div(
-        className="stem_data_container",
+        className="world_data_container",
         children=[
             dcc.Graph(
                 id="stem_histogram",
@@ -48,22 +51,30 @@ def layout():
 )
 def update_stem_histogram(selected_year):
     df_filtre = df[df["Year"] == selected_year]
+    df_filtre["Country_short"] = df_filtre["Entity"].str.slice(0, 8)
+    x_col = 'Country_short'
 
     fig = px.bar(
         df_filtre,
-        x="Entity",
+        x=x_col,
         y=VALUE_COL,
         color=VALUE_COL,
         color_continuous_scale=colorscale,
         labels={
-            VALUE_COL: "Female share of graduates\nin STEM programmes",
+            VALUE_COL: "Women in STEM (%)",
             "Entity": "Countries",
+            "Country_short": "Countries",
         },
-        hover_data={"Entity": True},
+        hover_data={
+            "Entity": True,
+            VALUE_COL: True,
+        },
+        range_color=(zmin, zmax),
     )
 
     fig.update_layout(
         xaxis_tickangle=-45,
+        yaxis=dict(range=[0, zmax]),
         height=600,
         plot_bgcolor="rgba(0,0,0,0)",
         showlegend=False,

@@ -102,7 +102,7 @@ def update_visualization(data_type, view_type):
     if data_type == "Gender Inequality Index":
         if view_type == "🌍 Map":
             return html.Div(
-                className="gii_container",
+                className="world_container",
                 children=[
                     gii_map_layout(),
                     gii_board_layout(),
@@ -110,7 +110,7 @@ def update_visualization(data_type, view_type):
             )
         else:  # 📊 Bars
             return html.Div(
-                className="gii_container",
+                className="world_container",
                 children=[
                     gii_bar_layout(),
                     gii_board_layout(),
@@ -119,14 +119,14 @@ def update_visualization(data_type, view_type):
     else:  # Women's Share in STEM
         if view_type == "🌍 Map":
             return html.Div(
-                className="stem_container",
+                className="world_container",
                 children=[
                     stem_map_layout(),
                 ]
             )
         else:  # 📊 Bars
             return html.Div(
-                className="stem_container",
+                className="world_container",
                 children=[
                     stem_bars_layout(),
                 ]
