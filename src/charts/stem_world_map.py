@@ -5,6 +5,7 @@ import plotly.express as px
 from dash import html, dcc, callback
 from dash.dependencies import Input, Output
 from src.components.segmented_control import create_segmented_control
+from src.charts.slider import create_slider
 
 df = pd.read_csv("data/raw/world_women_in_stem.csv")
 world = gpd.read_file("data/cleaned/world_boundaries_simplified.geojson")
@@ -77,7 +78,6 @@ def create_choropleth(df_year):
     )
     return fig
 
-
 figs_by_year = {
     y: create_choropleth(merged_df[merged_df["Year"] == y])
     for y in years
@@ -97,20 +97,13 @@ def layout():
                 figure=figs_by_year[years[0]],
                 config={"displayModeBar": False, "responsive": True},
             ),
-            dcc.Dropdown(
-                id="stem_year_dropdown",
-                options=[{"label": str(y), "value": y} for y in years],
-                value=years[0],
-                clearable=False,
-                searchable=False,
-                className="year_dropdown",
-            ),
+            create_slider(years, slider_id="stem"),
         ],
     )
 
 @callback(
     Output("stem_map", "figure"),
-    Input("stem_year_dropdown", "value"),
+    Input({"type": "year-slider", "id": "stem"}, "value"),
     Input("earth_selector_stem", "value"),
 )
 def update_stem_map(year_selected, earth_selected):

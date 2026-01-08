@@ -1,7 +1,7 @@
 import plotly.express as px
 from dash import Input, Output, html, dcc, callback
 import pandas as pd
-from src.charts.gii_slider import create_gii_slider
+from src.charts.slider import create_slider
 
 df = pd.read_csv("data/raw/world_women_in_stem.csv")
 
@@ -31,18 +31,6 @@ def layout():
     return html.Div(
         className="stem_data_container",
         children=[
-            html.Label(
-                "Sélectionnez une année :",
-                className="chart_title"
-            ),
-            dcc.Dropdown(
-                id="stem_year_dropdown",
-                options=[{"label": str(y), "value": y} for y in years],
-                value=years[0],
-                clearable=False,
-                searchable=False,
-                className="year_dropdown",
-            ),
             dcc.Graph(
                 id="stem_histogram",
                 config={
@@ -50,12 +38,13 @@ def layout():
                     "responsive": True
                 }
             ),
+            create_slider(years, slider_id="stem_histogram"),
         ]
     )
 
 @callback(
     Output("stem_histogram", "figure"),
-    Input("stem_year_dropdown", "value")
+    Input({"type": "year-slider", "id": "stem_histogram"}, "value")
 )
 def update_stem_histogram(selected_year):
     df_filtre = df[df["Year"] == selected_year]

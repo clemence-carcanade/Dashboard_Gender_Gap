@@ -4,7 +4,7 @@ import geopandas as gpd
 import plotly.express as px
 from dash import html, dcc, callback
 from dash.dependencies import Input, Output, State
-from src.charts.gii_slider import create_gii_slider
+from src.charts.slider import create_slider
 from src.components.segmented_control import create_segmented_control
 
 df = pd.read_csv("data/raw/world_GII.csv")
@@ -93,17 +93,18 @@ def layout():
                 figure=figs_by_year[years[0]],
                 config={"displayModeBar": False, "responsive": True},
             ),
-            create_gii_slider(years, "gii_slider"),
+            create_slider(years, slider_id="gii"),
         ]
     )
 
 @callback(
     Output("gii_map", "figure"),
-    Input("gii_slider", "value"),
-    Input("earth_selector", "value")
+    Input({"type": "year-slider", "id": "gii"}, "value"),
+    Input("earth_selector", "value"),
 )
 def update_map_and_projection(year_selected, earth_selected):
     fig = figs_by_year[year_selected]
+
     if earth_selected == "Plan":
         fig.update_geos(projection_type="natural earth")
     else:

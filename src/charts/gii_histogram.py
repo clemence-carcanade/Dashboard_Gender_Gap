@@ -1,7 +1,7 @@
 import plotly.express as px
 from dash import Input, Output, html, dcc, callback
 import pandas as pd
-from src.charts.gii_slider import create_gii_slider
+from src.charts.slider import create_slider
 from src.components.segmented_control import create_segmented_control
 
 df = pd.read_csv("data/raw/world_GII.csv")
@@ -40,24 +40,25 @@ def layout():
     return html.Div(
         className="gii_data_container",
         children=[
-        create_segmented_control(
+            create_segmented_control(
                 className="segmented_control small middle",
                 id="continent_selector",
                 options=continent,
             ),
-        dcc.Graph(
-            id='gii_histogram',
-            config={
-                "displayModeBar": False,
-                "responsive": True
-            }
-        ),
-        create_gii_slider(years, "gii_slider"),
-    ])
+            dcc.Graph(
+                id='gii_histogram',
+                config={
+                    "displayModeBar": False,
+                    "responsive": True
+                }
+            ),
+            create_slider(years, slider_id="gii_histogram"),
+        ])
 
 @callback(
     Output('gii_histogram', 'figure'),
-    [Input('gii_slider', 'value'), Input('continent_selector', 'value')]
+    [Input({"type": "year-slider", "id": "gii_histogram"}, "value"),
+     Input('continent_selector', 'value')]
 )
 def update_map(selected_year, selected_continent):
     df_filtre = df_long[df_long["Year"] == selected_year].copy()

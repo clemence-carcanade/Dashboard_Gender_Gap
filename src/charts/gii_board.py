@@ -65,7 +65,7 @@ def toggle_ranking_display(selected):
 
 @callback(
     Output("gii_ranking_leaders", "children"),
-    Input("gii_slider", "value")
+    Input({"type": "year-slider", "id": "gii"}, "value")
 )
 def update_ranking_leaders(year_selected):
     df_year = (
@@ -90,7 +90,7 @@ def update_ranking_leaders(year_selected):
 
 @callback(
     Output("gii_ranking_lowest", "children"),
-    Input("gii_slider", "value")
+    Input({"type": "year-slider", "id": "gii"}, "value")
 )
 def update_ranking_lowest(year_selected):
     df_year = (
@@ -116,7 +116,7 @@ def update_ranking_lowest(year_selected):
 @callback(
     [Output("year_rank_leaders", "children"),
      Output("year_rank_lowest", "children")],
-    Input("gii_slider", "value")
+    Input({"type": "year-slider", "id": "gii"}, "value")
 )
 def update_year(year_selected):
     year_str = str(year_selected)
