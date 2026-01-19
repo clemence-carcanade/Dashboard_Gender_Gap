@@ -102,6 +102,66 @@ body{
     font-size: 20px;
 }
 
+/* ABOUT US */
+.about-page {
+    margin: 12%;
+    margin-top: 130px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    position: relative;
+}
+
+/* Conteneur pour image + texte côte à côte */
+.about-page .content-row {
+    display: flex;
+    flex-direction: row;
+    gap: 40px; /* Espace entre l'image et le texte */
+}
+
+/* Image du logo */
+.about-page .logo-image {
+    width: 400px; /* Ajustez la taille selon vos besoins */
+    height: auto; /* Garde les proportions */
+    object-fit: contain; /* Évite la déformation */
+    flex-shrink: 0; /* Empêche l'image de rétrécir */
+}
+
+/* Gros conteneur de texte */
+.about-page .main-text-container {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 40px;
+    flex: 1; /* Prend l'espace restant à côté de l'image */
+}
+
+.about-page .main-text-container h1 {
+    margin: 0 0 20px 0;
+    font-size: 3rem;
+    font-weight: 700;
+}
+
+.about-page .main-text-container p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.about-page .cards-row {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    flex-wrap: wrap; /* Passe à la ligne si nécessaire */
+    margin-left: 430px;
+}
+/* CARTES */
+.about-page .about-cards .card {
+    flex: 1;               /* toutes les cartes même largeur */
+    min-width: 250px;      /* évite qu'elles deviennent trop petites */
+}
+
+
 /*SEGMENTED CONTROL*/
 .segmented_control {
     background: linear-gradient(to bottom, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.2));

@@ -2,7 +2,7 @@ from dash import Dash, html, dcc, callback
 from dash.dependencies import Input, Output
 from src.components.navbar import create_navbar
 from src.pages.home import layout as home_layout
-
+from src.pages.about import layout as about_layout
 app = Dash(__name__, suppress_callback_exceptions=True, assets_folder="src/assets")
 
 app.layout = html.Div([
@@ -19,7 +19,7 @@ def display_page(pathname):
     if pathname == "/":
         return home_layout()
     elif pathname == "/about":
-        return html.H1("About")
+        return about_layout()
     else:
         return html.H1("404 : Not found")
 
