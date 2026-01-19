@@ -50,8 +50,8 @@ def layout():
     Input({"type": "year-slider", "id": "stem"}, "value")
 )
 def update_stem_histogram(selected_year):
-    df_filtre = df[df["Year"] == selected_year]
-    df_filtre["Country_short"] = df_filtre["Entity"].str.slice(0, 8)
+    df_filtre = df[df["Year"] == selected_year].copy()
+    df_filtre.loc[:, "Country_short"] = df_filtre["Entity"].str.slice(0, 8)
     x_col = 'Country_short'
 
     fig = px.bar(
