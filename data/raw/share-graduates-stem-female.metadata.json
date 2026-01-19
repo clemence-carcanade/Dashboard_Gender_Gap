@@ -1,0 +1,37 @@
+{
+  "chart": {
+    "title": "Share of women graduating from STEM programs in tertiary education",
+    "subtitle": "Proportion of female graduates in STEM (Science, Technology, Engineering, and Mathematics) fields at the [tertiary](#dod:tertiary-education) level of education.",
+    "citation": "UNESCO via World Bank",
+    "originalChartUrl": "https://ourworldindata.org/grapher/share-graduates-stem-female?v=1&csvType=full&useColumnShortNames=false",
+    "selection": [
+      "Kyrgyzstan",
+      "Thailand",
+      "Australia",
+      "Armenia",
+      "United Kingdom",
+      "Uruguay",
+      "Uganda",
+      "United Arab Emirates"
+    ]
+  },
+  "columns": {
+    "Female share of graduates from Science, Technology, Engineering and Mathematics (STEM) programmes, tertiary (%)": {
+      "titleShort": "Female share of graduates from Science, Technology, Engineering and Mathematics (STEM) programmes, tertiary (%)",
+      "titleLong": "Female share of graduates from Science, Technology, Engineering and Mathematics (STEM) programmes, tertiary (%)",
+      "shortUnit": "",
+      "unit": "",
+      "timespan": "1998-2019",
+      "type": "Numeric",
+      "owidVariableId": 1105010,
+      "shortName": "se_ter_grad_fe_si_zs",
+      "lastUpdated": "2025-09-08",
+      "nextUpdate": "2026-09-08",
+      "citationShort": "UNESCO via World Bank – processed by Our World in Data",
+      "citationLong": "UNESCO via World Bank – processed by Our World in Data. “Female share of graduates from Science, Technology, Engineering and Mathematics (STEM) programmes, tertiary (%)” [dataset]. World Bank Gender Statistics, “World Bank Gender Statistics” [original data].",
+      "fullMetadata": "https://api.ourworldindata.org/v1/indicators/1105010.metadata.json"
+    }
+  },
+  "dateDownloaded": "2025-12-23",
+  "activeFilters": {}
+}
