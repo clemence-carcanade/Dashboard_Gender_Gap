@@ -1,4 +1,4 @@
-from dash import Dash, html, dcc
+from dash import Dash, html, dcc, callback
 from dash.dependencies import Input, Output
 from src.components.navbar import create_navbar
 from src.pages.home import layout as home_layout

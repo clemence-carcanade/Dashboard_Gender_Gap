@@ -1,6 +1,12 @@
-from dash import html
+from dash import html, callback
+from dash.dependencies import Input, Output
 from src.components.card import create_card
 from src.components.segmented_control import create_segmented_control
+from src.charts.gii_world_map import layout as gii_map_layout
+from src.charts.gii_histogram import layout as gii_bar_layout
+from src.charts.stem_histogram import layout as stem_bars_layout
+from src.charts.stem_world_map import layout as stem_map_layout
+from src.charts.board import layout as board_layout
 
 def layout():
     return html.Div(
@@ -69,7 +75,61 @@ def layout():
                 ]
             ),
             create_segmented_control(
-                options=["Gender Inequality Index", "Women's Share in Research"],
+                options=["Gender Inequality Index", "Women's Share in STEM"],
+                className="segmented_control",
+                id="data_selector"
+            ),
+            html.Div(
+                className="world_analysis",
+                children=[
+                    create_segmented_control(
+                        options=["🌍 Map", "📊 Bars"],
+                        className="segmented_control small",
+                        id="view_selector"
+                    ),
+                    html.Div(id="visualization_container")
+                ]
             ),
         ]
     )
+
+@callback(
+    Output("visualization_container", "children"),
+    [Input("data_selector", "value"),
+     Input("view_selector", "value")]
+)
+def update_visualization(data_type, view_type):
+    if data_type == "Gender Inequality Index":
+        if view_type == "🌍 Map":
+            return html.Div(
+                className="world_container",
+                children=[
+                    gii_map_layout(),
+                    board_layout("gii"),
+                ]
+            )
+        else:  # 📊 Bars
+            return html.Div(
+                className="world_container",
+                children=[
+                    gii_bar_layout(),
+                    board_layout("gii"),
+                ]
+            )
+    else:  # Women's Share in STEM
+        if view_type == "🌍 Map":
+            return html.Div(
+                className="world_container",
+                children=[
+                    stem_map_layout(),
+                    board_layout("stem"),
+                ]
+            )
+        else:  # 📊 Bars
+            return html.Div(
+                className="world_container",
+                children=[
+                    stem_bars_layout(),
+                    board_layout("stem"),
+                ]
+            )
