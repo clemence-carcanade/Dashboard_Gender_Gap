@@ -52,12 +52,12 @@ def layout():
                     "responsive": True
                 }
             ),
-            create_slider(years, slider_id="gii_histogram"),
+            create_slider(years, slider_id="gii"),
         ])
 
 @callback(
     Output('gii_histogram', 'figure'),
-    [Input({"type": "year-slider", "id": "gii_histogram"}, "value"),
+    [Input({"type": "year-slider", "id": "gii"}, "value"),
      Input('continent_selector', 'value')]
 )
 def update_map(selected_year, selected_continent):

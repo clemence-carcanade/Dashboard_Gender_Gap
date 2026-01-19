@@ -4,9 +4,9 @@ from src.components.card import create_card
 from src.components.segmented_control import create_segmented_control
 from src.charts.gii_world_map import layout as gii_map_layout
 from src.charts.gii_histogram import layout as gii_bar_layout
-from src.charts.gii_board import layout as gii_board_layout
 from src.charts.stem_histogram import layout as stem_bars_layout
 from src.charts.stem_world_map import layout as stem_map_layout
+from src.charts.board import layout as board_layout
 
 def layout():
     return html.Div(
@@ -105,7 +105,7 @@ def update_visualization(data_type, view_type):
                 className="world_container",
                 children=[
                     gii_map_layout(),
-                    gii_board_layout(),
+                    board_layout("gii"),
                 ]
             )
         else:  # 📊 Bars
@@ -113,7 +113,7 @@ def update_visualization(data_type, view_type):
                 className="world_container",
                 children=[
                     gii_bar_layout(),
-                    gii_board_layout(),
+                    board_layout("gii"),
                 ]
             )
     else:  # Women's Share in STEM
@@ -122,6 +122,7 @@ def update_visualization(data_type, view_type):
                 className="world_container",
                 children=[
                     stem_map_layout(),
+                    board_layout("stem"),
                 ]
             )
         else:  # 📊 Bars
@@ -129,5 +130,6 @@ def update_visualization(data_type, view_type):
                 className="world_container",
                 children=[
                     stem_bars_layout(),
+                    board_layout("stem"),
                 ]
             )

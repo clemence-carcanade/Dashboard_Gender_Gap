@@ -41,13 +41,13 @@ def layout():
                     "responsive": True
                 }
             ),
-            create_slider(years, slider_id="stem_histogram"),
+            create_slider(years, slider_id="stem"),
         ]
     )
 
 @callback(
     Output("stem_histogram", "figure"),
-    Input({"type": "year-slider", "id": "stem_histogram"}, "value")
+    Input({"type": "year-slider", "id": "stem"}, "value")
 )
 def update_stem_histogram(selected_year):
     df_filtre = df[df["Year"] == selected_year]
@@ -61,7 +61,7 @@ def update_stem_histogram(selected_year):
         color=VALUE_COL,
         color_continuous_scale=colorscale,
         labels={
-            VALUE_COL: "Women in STEM (%)",
+            VALUE_COL: "Women in<br>STEM (%)",
             "Entity": "Countries",
             "Country_short": "Countries",
         },
@@ -75,7 +75,6 @@ def update_stem_histogram(selected_year):
     fig.update_layout(
         xaxis_tickangle=-45,
         yaxis=dict(range=[0, zmax]),
-        height=600,
         plot_bgcolor="rgba(0,0,0,0)",
         showlegend=False,
         font=dict(family="SF Pro Display"),
