@@ -129,7 +129,7 @@ body{
 
 /* Gros conteneur de texte */
 .about-page .main-text-container {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.35);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 20px;
     padding: 40px;
@@ -151,14 +151,18 @@ body{
 .about-page .cards-row {
     display: flex;
     flex-direction: row;
-    gap: 20px;
-    flex-wrap: wrap; /* Passe à la ligne si nécessaire */
-    margin-left: 430px;
+    gap: 40px;
+    flex-wrap: wrap;
+    margin-left: 440px;
+    font-size: 16px;
+    line-height: 30px;
 }
+
 /* CARTES */
-.about-page .about-cards .card {
-    flex: 1;               /* toutes les cartes même largeur */
-    min-width: 250px;      /* évite qu'elles deviennent trop petites */
+.about-page .cards-row .card {
+    background-color: var(--blue);
+    color: white;
+    box-shadow: none; /* Retire l'ombre */
 }
 
 
