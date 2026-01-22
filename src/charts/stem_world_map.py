@@ -74,7 +74,7 @@ def create_choropleth(df_year):
     fig.update_geos(fitbounds="locations", visible=False)
     fig.update_layout(
         margin=dict(l=0, r=0, t=0, b=0),
-        coloraxis_colorbar=dict(title="Women in STEM (%)"),
+        coloraxis_colorbar=dict(title="Women in<br>STEM (%)"),
     )
     return fig
 
