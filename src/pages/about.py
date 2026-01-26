@@ -10,14 +10,15 @@ def layout():
                 className="background-glow",
                 style={
                     "--color": "var(--pink)",
-                    "--top": "60px",
+                    "--top": "90px",
                     "--right": "450px"
                 }
             ),
+            
             html.Div(
                 className="background-glow",
                 style={
-                    "--color": "var(--pink)",
+                    "--color": "var(--blue)",
                     "--top": "500px",
                     "--right": "450px"
                 }
@@ -25,7 +26,7 @@ def layout():
             html.Div(
                 className="background-glow",
                 style={
-                    "--color": "var(--blue)",
+                    "--color": "var(--pink)",
                     "--top": "350px",
                     "--left": "50px"
                 }
@@ -35,6 +36,14 @@ def layout():
                 style={
                     "--color": "var(--blue)",
                     "--top": "50px",
+                    "--right": "-20px"
+                }
+            ),
+            html.Div(
+                className="background-glow",
+                style={
+                    "--color": "var(--pink)",
+                    "--top": "350px",
                     "--right": "-20px"
                 }
             ),
@@ -51,8 +60,7 @@ def layout():
                             className="main-text-container",
                             children=[
                                 html.H1("About us..."),
-                                html.P("Ce Dashboard a été réalisé dans le cadre d'un projet académique pour l'école d'ingénieure ESIEE Paris dans la filière en apprentissage Informatique et Applications, "
-                                "par Clémence Carcanade, apprentie chez Dassault Système et Thaïs Castillo, apprentie chez Crédit Agricole Payment Services.")
+                                html.P("This Dashboard was created as part of an academic project for the ESIEE Paris engineering school in the Computer Science and Applications apprenticeship program, by Clémence Carcanade, apprentice at Dassault Système, and Thaïs Castillo, apprentice at Crédit Agricole Payment Services.")
                             ]
                         ),
                         # Petits conteneurs alignés en dessous
@@ -62,38 +70,70 @@ def layout():
                             className="cards-row",
                             children=[
                                 create_card(
-                                    html.P([
-                                        html.Strong("Objectifs du projet :"),
-                                        html.Br(),
-                                        "Texte normal ligne 1",
-                                        html.Br(),
-                                        "Texte normal ligne 2",
-                                        html.Br(),
-                                        "Texte normal ligne 3"
-                                    ])
+                                    html.Div(
+                                        className="titre-card",
+                                        children=[
+                                            html.H3("Project goals :"),
+                                            html.Br(),
+                                            "This dashboard highlights a major societal issue: the link between global innovation and the inclusion of women. We first analyze the Global Innovation Index (GII), before examining the proportion of women in STEM fields internationally. Finally, we take a specific look at France, examining disparities in higher education and wage gaps.",
+                                            html.Br(),
+                                        ]
+                                    )
                                 ),
                                 create_card(
-                                    html.P([
-                                        html.Strong("Outils utilisés :"),
-                                        html.Br(),
-                                        "Texte normal ligne 1",
-                                        html.Br(),
-                                        "Texte normal ligne 2",
-                                        html.Br(),
-                                        "Texte normal ligne 3"
-                                    ])
-                                ),
-                                create_card(
-                                    html.P([
-                                        html.Strong("Pourquoi ce sujet ?"),
-                                        html.Br(),
-                                        "Texte normal ligne 1",
-                                        html.Br(),
-                                        "Texte normal ligne 2",
-                                        html.Br(),
-                                        "Texte normal ligne 3"
-                                    ])
-                                )
+    html.Div(
+        className="titre-card",
+        children=[
+            html.H3("Tools used"),
+            html.Div(
+                className="card-lines",
+                children=[
+                    html.Div(
+                        className="card-line",
+                        children=[
+                            html.Img(
+                                src="/assets/images/python.png",
+                                className="card-icon"
+                            ),
+                            html.Span("Python 3.12")
+                        ]
+                    ),
+                    html.Div(
+                        className="card-line",
+                        children=[
+                            html.Img(
+                                src="/assets/images/pandas_white.png",
+                                className="card-icon"
+                            ),
+                            html.Span("Pandas")
+                        ]
+                    ),
+                    html.Div(
+                        className="card-line",
+                        children=[
+                            html.Img(
+                                src="/assets/images/css.png",
+                                className="card-icon"
+                            ),
+                            html.Span("CSS")
+                        ]
+                    ),
+                    html.Div(
+                        className="card-line",
+                        children=[
+                            html.Img(
+                                src="/assets/images/plotly.webp",
+                                className="card-icon"
+                            ),
+                            html.Span("Plotly, Dash")
+                        ]
+                    ),
+                ]
+            ),
+        ]
+    )
+)
+,
                             ]
                         )   
         ]
