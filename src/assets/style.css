@@ -1,3 +1,32 @@
+/* Import des polices SF Pro Display */
+@font-face {
+    font-family: 'SF Pro Display';
+    src: url('/assets/fonts/SFPRODISPLAYREGULAR.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'SF Pro Display';
+    src: url('/assets/fonts/SFPRODISPLAYBOLD.woff') format('woff');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'SF Pro Display';
+    src: url('/assets/fonts/SFPRODISPLAYBLACKITALIC.woff') format('woff');
+    font-weight: 400;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'SF Pro Display';
+    src: url('/assets/fonts/SFPRODISPLAYBOLDITALIC.woff') format('woff');
+    font-weight: 700;
+    font-style: italic;
+}
+
 /*GENERAL*/
 :root {
     --dark-pink: #D459A0;
@@ -5,12 +34,12 @@
     --light-grey: #F5F5F5;
     --grey: #EDEDED;
     --blue: #5992E3;
-    font-family: SF Pro Display;
+    font-family: SF Pro Display, sans-serif;
     font-size: 18px;
 }
 
 body{
-    height: 3000px;
+    height: auto;
 }
 
 /*NAVBAR*/
@@ -323,6 +352,16 @@ Button:hover{
 .ranking_value {
     text-align: right;
     font-variant-numeric: tabular-nums;
+}
+
+.source {
+    display: flex;
+    justify-content: center;
+    padding-top: 15px;
+}
+
+.source.fr {
+    padding-top: 0px;
 }
 
 .bookmarks {
