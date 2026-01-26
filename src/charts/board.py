@@ -27,9 +27,13 @@ def layout(data_type="gii"):
     if data_type == "gii":
         title_leaders = "Leading Countries in Gender Equality"
         title_lowest = "Lowest Countries in Gender Equality"
+        source_title = "Kaggle"
+        source_url = "https://www.kaggle.com/code/anoopjohny/gender-inequality-study"
     else:  # stem
         title_leaders = "Countries with the Highest Women's Share in STEM"
         title_lowest = "Countries with the Lowest Women's Share in STEM"
+        source_title = "Our World in Data"
+        source_url = "https://ourworldindata.org/grapher/share-graduates-stem-female"
     
     return html.Div(
         className="ranking_container",
@@ -62,7 +66,13 @@ def layout(data_type="gii"):
                         ]
                     )
                 ]
-            )
+            ),
+            html.A(
+                source_title,
+                href=source_url,
+                target="_blank",
+                className="source",
+            ),
         ]
     )
 

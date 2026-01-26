@@ -15,15 +15,7 @@ REGION_NAMES = ['Île-de-France', 'Centre-Val de Loire', 'Bourgogne-Franche-Comt
 df_departments = df[~df['Region'].isin(REGION_NAMES)].copy()
 df_departments['Salary_Gap_2022_abs'] = df_departments['Salary_Gap_2022'].abs()
 
-# ----------------------------
-# BOARD LAYOUT
-# ----------------------------
-
 def layout():
-    """
-    Crée un board de classement qui s'adapte automatiquement 
-    au metric sélectionné (Education ou Salary)
-    """
     return html.Div(
         className="ranking_container",
         children=[
@@ -55,13 +47,15 @@ def layout():
                         ]
                     )
                 ]
-            )
+            ),
+            html.A(
+                "INSEE",
+                href="https://www.insee.fr/fr/statistiques/2513786#consulter",
+                target="_blank",
+                className="source fr",
+            ),
         ]
     )
-
-# ----------------------------
-# TOGGLE DISPLAY CALLBACK
-# ----------------------------
 
 @callback(
     [Output("leaders_section_france", "style"),
@@ -74,10 +68,6 @@ def toggle_france_display(selected):
     else:
         return {"display": "none"}, {"display": "block"}
 
-# ----------------------------
-# UPDATE RANKINGS CALLBACK
-# ----------------------------
-
 @callback(
     [Output("title_leaders_france", "children"),
      Output("title_lowest_france", "children"),
@@ -89,9 +79,6 @@ def toggle_france_display(selected):
      Input("top_selector_france", "value")]
 )
 def update_france_rankings(metric, _):
-    """
-    Met à jour les rankings en fonction du metric sélectionné
-    """
     if metric == "Disparity in Education":
         # EDUCATION (2021)
         title_leaders = "Departments with Highest Women's Share in Higher Education"
