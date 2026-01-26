@@ -8,6 +8,10 @@ from src.charts.stem_histogram import layout as stem_bars_layout
 from src.charts.stem_world_map import layout as stem_map_layout
 from src.charts.board import layout as board_layout
 
+from src.charts.fr_histogram import education_bars_layout as education_bars_layout
+from src.charts.fr_map import education_map_layout as education_map_layout
+from src.charts.fr_board import layout as fr_board_layout
+
 def layout():
     return html.Div(
         className="home-page",
@@ -90,6 +94,22 @@ def layout():
                     html.Div(id="visualization_container")
                 ]
             ),
+            create_segmented_control(
+                options=["Disparity in Education", "Wage Inequality"],
+                className="segmented_control",
+                id="france_data_selector"
+            ),
+            html.Div(
+                className="world_analysis",
+                children=[
+                    create_segmented_control(
+                        options=["🌍 Map", "📊 Bars"],
+                        className="segmented_control small",
+                        id="france_view_selector"
+                    ),
+                    html.Div(id="france_visualization_container")
+                ]
+            ),
         ]
     )
 
@@ -133,3 +153,28 @@ def update_visualization(data_type, view_type):
                     board_layout("stem"),
                 ]
             )
+        
+@callback(
+    Output("france_visualization_container", "children"),
+    Input("france_data_selector", "value"),
+    Input("france_view_selector", "value")
+)
+def update_visualization_france(data_type, view_type):
+
+    if view_type == "🌍 Map":
+        return html.Div(
+            className="world_container",
+            children=[
+                education_map_layout(data_type),
+                fr_board_layout()  # ✅ Utiliser le board France
+            ]
+        )
+
+    else:  # 📊 Bars
+        return html.Div(
+            className="world_container",
+            children=[
+                education_bars_layout(data_type),
+                fr_board_layout()  # ✅ Même board, changera automatiquement
+            ]
+        )
