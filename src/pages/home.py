@@ -11,6 +11,8 @@ from src.charts.board import layout as board_layout
 from src.charts.fr_histogram import education_bars_layout as education_bars_layout
 from src.charts.fr_map import education_map_layout as education_map_layout
 from src.charts.fr_board import layout as fr_board_layout
+from src.charts.fr_university import layout as university_layout
+from src.charts.fr_phd import layout as phd_layout
 
 def layout():
     return html.Div(
@@ -110,6 +112,8 @@ def layout():
                     html.Div(id="france_visualization_container")
                 ]
             ),
+            university_layout(),
+            phd_layout(),
         ]
     )
 
