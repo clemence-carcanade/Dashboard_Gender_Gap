@@ -7,6 +7,7 @@ from src.charts.gii_histogram import layout as gii_bar_layout
 from src.charts.stem_histogram import layout as stem_bars_layout
 from src.charts.stem_world_map import layout as stem_map_layout
 from src.charts.board import layout as board_layout
+from src.pages.world_analysis import layout as world_layout
 
 from src.charts.fr_histogram import education_bars_layout as education_bars_layout
 from src.charts.fr_map import education_map_layout as education_map_layout
@@ -96,6 +97,7 @@ def layout():
                     html.Div(id="visualization_container")
                 ]
             ),
+            world_layout(),
             create_segmented_control(
                 options=["Disparity in Education", "Wage Inequality"],
                 className="segmented_control",

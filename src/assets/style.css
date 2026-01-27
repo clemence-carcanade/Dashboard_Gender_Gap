@@ -249,6 +249,27 @@ body{
     color: white;
 }
 
+.world_analysis_written {
+    display: flex;
+    flex-direction: column;
+    gap:30px
+}
+
+.icon_3d {
+    height: 200px;
+    width: auto;
+}
+
+.icon_3d.big {
+    height:450px;
+}
+
+.illustrated_text {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+}
+
 /*GII_DATA*/
 Button{
     background-color: var(--light-grey);
