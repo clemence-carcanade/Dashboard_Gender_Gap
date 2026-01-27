@@ -120,7 +120,7 @@ def create_bar_figure(selected_metric):
 
     fig.update_layout(
         plot_bgcolor="rgba(0,0,0,0)",
-        font=dict(family="SF Pro Display"),
+        font=dict(family="SF Pro Display", size=14),
         showlegend=False,
         coloraxis_showscale=False,
     )
