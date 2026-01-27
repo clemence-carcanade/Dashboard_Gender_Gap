@@ -112,8 +112,17 @@ def layout():
                     html.Div(id="france_visualization_container")
                 ]
             ),
-            university_layout(),
-            phd_layout(),
+            create_segmented_control(
+                options=["Bachelor's Degree Fields", "PhD Fields"],
+                className="segmented_control",
+                id="france_study_data_selector"
+            ),
+            html.Div(
+                className="study_analysis",
+                children=[
+                    html.Div(id="france_study_visualization_container")
+                ]
+            ),
         ]
     )
 
@@ -132,7 +141,7 @@ def update_visualization(data_type, view_type):
                     board_layout("gii"),
                 ]
             )
-        else:  # 📊 Bars
+        else:
             return html.Div(
                 className="world_container",
                 children=[
@@ -140,7 +149,7 @@ def update_visualization(data_type, view_type):
                     board_layout("gii"),
                 ]
             )
-    else:  # Women's Share in STEM
+    else:
         if view_type == "🌍 Map":
             return html.Div(
                 className="world_container",
@@ -149,7 +158,7 @@ def update_visualization(data_type, view_type):
                     board_layout("stem"),
                 ]
             )
-        else:  # 📊 Bars
+        else:
             return html.Div(
                 className="world_container",
                 children=[
@@ -170,7 +179,7 @@ def update_visualization_france(data_type, view_type):
             className="world_container",
             children=[
                 education_map_layout(data_type),
-                fr_board_layout()  # ✅ Utiliser le board France
+                fr_board_layout()
             ]
         )
 
@@ -179,6 +188,18 @@ def update_visualization_france(data_type, view_type):
             className="world_container",
             children=[
                 education_bars_layout(data_type),
-                fr_board_layout()  # ✅ Même board, changera automatiquement
+                fr_board_layout()
             ]
         )
+    
+@callback(
+    Output("france_study_visualization_container", "children"),
+    Input("france_study_data_selector", "value")
+)
+def update_visualization_study_france(data_type):
+
+    if data_type == "Bachelor's Degree Fields":
+        return university_layout()
+
+    else:
+        return phd_layout()

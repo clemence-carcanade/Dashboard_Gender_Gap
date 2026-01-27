@@ -1,4 +1,4 @@
-/* Import des polices SF Pro Display */
+/* Import SF Pro Display */
 @font-face {
     font-family: 'SF Pro Display';
     src: url('/assets/fonts/SFPRODISPLAYREGULAR.woff') format('woff');
@@ -211,7 +211,7 @@ body{
 }
 
 .segmented_control.small.middle {
-    margin-top: 0px;
+    margin-top: 10px;
     justify-self: center;
 }
 
@@ -281,6 +281,7 @@ Button:hover{
     display: grid;
     grid-template-rows: 1fr auto;
     gap: 10px;
+    position: relative;
 }
 
 #gii_map {
@@ -362,6 +363,13 @@ Button:hover{
 
 .source.fr {
     padding-top: 0px;
+}
+
+.source.study {
+    position: absolute;
+    bottom: 25px;
+    right: 80px;
+    z-index: 2;
 }
 
 .bookmarks {
