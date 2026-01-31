@@ -24,18 +24,16 @@ df_stem["Year"] = df_stem["Year"].astype(int)
 df_stem = df_stem[~df_stem["Year"].isin([1998, 2019])]
 
 def layout(data_type="gii"):
-    """
-    Crée un board de classement adapté au type de données
-    
-    Args:
-        data_type: "gii" ou "stem"
-    """
     if data_type == "gii":
         title_leaders = "Leading Countries in Gender Equality"
         title_lowest = "Lowest Countries in Gender Equality"
+        source_title = "Kaggle"
+        source_url = "https://www.kaggle.com/code/anoopjohny/gender-inequality-study"
     else:  # stem
         title_leaders = "Countries with the Highest Women's Share in STEM"
         title_lowest = "Countries with the Lowest Women's Share in STEM"
+        source_title = "Our World in Data"
+        source_url = "https://ourworldindata.org/grapher/share-graduates-stem-female"
     
     return html.Div(
         className="ranking_container",
@@ -68,7 +66,13 @@ def layout(data_type="gii"):
                         ]
                     )
                 ]
-            )
+            ),
+            html.A(
+                source_title,
+                href=source_url,
+                target="_blank",
+                className="source",
+            ),
         ]
     )
 
@@ -163,7 +167,7 @@ def update_stem_leaders(year_selected):
     df_year = (
         df_stem[df_stem["Year"] == year_selected]
         .dropna(subset=[VALUE_COL])
-        .sort_values(VALUE_COL, ascending=False)  # Plus haut = meilleur pour STEM
+        .sort_values(VALUE_COL, ascending=False)
         .head(10)
         .reset_index(drop=True)
     )
@@ -188,7 +192,7 @@ def update_stem_lowest(year_selected):
     df_year = (
         df_stem[df_stem["Year"] == year_selected]
         .dropna(subset=[VALUE_COL])
-        .sort_values(VALUE_COL)  # Plus bas pour STEM
+        .sort_values(VALUE_COL)
         .head(10)
         .reset_index(drop=True)
     )

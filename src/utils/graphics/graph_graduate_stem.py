@@ -62,7 +62,7 @@ def update_map(selected_year):
         df_filtre,
         x='Entity',
         y=VALUE_COL,
-        labels={'Female share of graduates from Science, Technology, Engineering and Mathematics (STEM) programmes, tertiary': 'Female share of graduates'+ '\n'+ 'in STEM programmes', 'Entity': 'Countries'},
+        labels={'Female share of graduates from Science, Technology, Engineering and Mathematics (STEM) programmes, tertiary': 'Female share of graduates in STEM programmes', 'Entity': 'Countries'},
         color='Female share of graduates from Science, Technology, Engineering and Mathematics (STEM) programmes, tertiary',
         color_continuous_scale=colorscale,
         hover_data=['Entity']

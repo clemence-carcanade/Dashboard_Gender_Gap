@@ -1,3 +1,32 @@
+/* Import SF Pro Display */
+@font-face {
+    font-family: 'SF Pro Display';
+    src: url('/assets/fonts/SFPRODISPLAYREGULAR.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'SF Pro Display';
+    src: url('/assets/fonts/SFPRODISPLAYBOLD.woff') format('woff');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'SF Pro Display';
+    src: url('/assets/fonts/SFPRODISPLAYBLACKITALIC.woff') format('woff');
+    font-weight: 400;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'SF Pro Display';
+    src: url('/assets/fonts/SFPRODISPLAYBOLDITALIC.woff') format('woff');
+    font-weight: 700;
+    font-style: italic;
+}
+
 /*GENERAL*/
 :root {
     --dark-pink: #D459A0;
@@ -5,12 +34,13 @@
     --light-grey: #F5F5F5;
     --grey: #EDEDED;
     --blue: #5992E3;
-    font-family: SF Pro Display;
+    font-family: SF Pro Display, sans-serif;
     font-size: 18px;
 }
 
-body{
-    height: 3000px;
+body, #_dash-app-content {
+    margin: 0;
+    padding: 0;
 }
 
 /*NAVBAR*/
@@ -33,10 +63,20 @@ body{
 .navbar ul {
     list-style-type: none;
     display: flex;
-    justify-content: space-between;
     width: 100%;
     margin: 0 5%;
     padding: 0;
+    align-items: center;
+}
+
+.navbar_left,
+.navbar_right {
+    display: flex;
+    gap: 30px;
+}
+
+.navbar_right {
+    margin-left: auto;
 }
 
 .navbar a {
@@ -71,6 +111,7 @@ body{
 .home-page {
     margin: 12%;
     margin-top: 130px;
+    margin-bottom: 100px;
     display: flex;
     flex-direction: column;
     gap: 30px;
@@ -122,7 +163,7 @@ body{
 }
 
 .segmented_control.small.middle {
-    margin-top: 0px;
+    margin-top: 10px;
     justify-self: center;
 }
 
@@ -160,6 +201,27 @@ body{
     color: white;
 }
 
+.world_analysis_written {
+    display: flex;
+    flex-direction: column;
+    gap:30px
+}
+
+.icon_3d {
+    height: 200px;
+    width: auto;
+}
+
+.icon_3d.big {
+    height:325px;
+}
+
+.illustrated_text {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+}
+
 /*GII_DATA*/
 Button{
     background-color: var(--light-grey);
@@ -192,6 +254,7 @@ Button:hover{
     display: grid;
     grid-template-rows: 1fr auto;
     gap: 10px;
+    position: relative;
 }
 
 #gii_map {
@@ -265,6 +328,23 @@ Button:hover{
     font-variant-numeric: tabular-nums;
 }
 
+.source {
+    display: flex;
+    justify-content: center;
+    padding-top: 15px;
+}
+
+.source.fr {
+    padding-top: 0px;
+}
+
+.source.study {
+    position: absolute;
+    bottom: 25px;
+    right: 80px;
+    z-index: 2;
+}
+
 .bookmarks {
     position: absolute;
     margin-top: 30px;
@@ -318,4 +398,94 @@ Button:hover{
 .bookmarks label:has(input:checked)::after {
     border-top: 20px solid var(--dark-pink);
     border-bottom: 20px solid var(--dark-pink);
+}
+
+/* ABOUT US */
+.about_page {
+    margin: 12%;
+    margin-top: 130px;
+    margin-bottom: 100px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.content_row {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+}
+
+.about_img {
+    width: 400px;
+    height: auto;
+}
+
+.cards_row {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+}
+
+/*FOOTER*/
+.footer {
+    background-color: var(--pink);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    position: relative;
+}
+
+.footer_logo {
+    height: 120px;
+    width: auto;
+}
+
+.footer_top {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+}
+
+.footer_icons {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.footer_links {
+    display: flex;
+}
+
+.footer_links ul {
+    list-style-type: none;
+}
+
+.footer_links li {
+    display: flex;
+}
+
+.footer_links a {
+    text-decoration: none;
+    color: white;
+}
+
+.logo_links {
+    height: 50px;
+}
+
+.footer_bottom {
+    text-align: center;
+}
+
+.footer::before {
+    content: "";
+    position: absolute;
+    top: -50px;
+    left: 0;
+    right: 0;
+    height: 50px;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0), var(--pink));
+    pointer-events: none;
 }

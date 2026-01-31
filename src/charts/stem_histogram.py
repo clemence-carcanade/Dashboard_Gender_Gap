@@ -72,6 +72,10 @@ def update_stem_histogram(selected_year):
         range_color=(zmin, zmax),
     )
 
+    fig.update_traces(
+        hovertemplate="<b>%{customdata[0]}</b><br>STEM (%): %{y}<extra></extra>"
+    )
+
     fig.update_layout(
         xaxis_tickangle=-45,
         yaxis=dict(range=[0, zmax]),
