@@ -51,7 +51,7 @@ def layout():
                     create_card(
                         html.H1("\"Where are the women in science?\""),
                         html.H3("This question, still asked far too often, highlights the persistent gender inequalities in scientific fields."),
-                        html.P("As part of a student project focused on creating an interactive dashboard in Python, we chose to explore these inequalities in depth. The aim of this work is to shed light on the disparities between women and men in science, both in France and worldwide, using reliable data and recognized studies. We selected this topic because it resonates strongly with us: as women studying in digital and engineering fields, we are directly concerned by the underrepresentation of women in these domains, which remain largely male-dominated. This project is therefore both an analytical exercise and a personal commitment, intended to raise awareness and inform through educational data visualizations.")
+                        html.P(["As part of a student project focused on creating an interactive dashboard in Python, we chose to explore these inequalities in depth. The aim of this work is to shed light on the ", html.B("disparities between women and men in science"), ", both in France and worldwide, using reliable data and recognized studies. We selected this topic because it resonates strongly with us: as women studying in digital and engineering fields, we are directly concerned by the underrepresentation of women in these domains, which remain largely male-dominated. This project is therefore both an analytical exercise and a personal commitment, intended to raise awareness and inform through educational data visualizations."])
                     ),
                     html.Img(
                         src="/assets/images/gender_balance.png",
@@ -62,9 +62,11 @@ def layout():
             ),
             html.H1(
                 "World Analysis",
+                id="world_anchor",
                 style={"textAlign": "center",
                        "marginTop": "5px",
-                       "marginBottom": "5px"}
+                       "marginBottom": "5px",
+                       "scrollMarginTop": "135px"}
             ),
             html.Div(
                 className="quote",
@@ -108,9 +110,11 @@ def layout():
             world_layout(),
             html.H1(
                 "France Analysis",
+                id="france_anchor",
                 style={"textAlign": "center",
                        "marginTop": "5px",
-                       "marginBottom": "5px"}
+                       "marginBottom": "5px",
+                       "scrollMarginTop": "135px"}
             ),
             create_segmented_control(
                 options=["Disparity in Education", "Wage Inequality"],
@@ -164,7 +168,7 @@ def layout():
                 className="background-glow",
                 style={
                     "--color": "var(--pink)",
-                    "--top": "6150px",
+                    "--top": "6040px",
                     "--left": "50px"
                 }
             ),
