@@ -151,6 +151,9 @@ body, #_dash-app-content {
     flex-direction: column;
     gap: 30px;
     position: relative;
+    font-family: SF Pro Display;
+    font-size: 1.1rem;
+    line-height: 1.6;
 }
 
 /* Conteneur pour image + texte côte à côte */
@@ -166,11 +169,12 @@ body, #_dash-app-content {
     height: auto; /* Garde les proportions */
     object-fit: contain; /* Évite la déformation */
     flex-shrink: 0; /* Empêche l'image de rétrécir */
+    margin-top: 100px;
 }
 
 /* Gros conteneur de texte */
 .about-page .main-text-container {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.35);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 20px;
     padding: 40px;
@@ -184,22 +188,56 @@ body, #_dash-app-content {
 }
 
 .about-page .main-text-container p {
-    font-size: 1.1rem;
-    line-height: 1.6;
     margin: 0;
 }
 
 .about-page .cards-row {
     display: flex;
-    flex-direction: row;
-    gap: 20px;
-    flex-wrap: wrap; /* Passe à la ligne si nécessaire */
-    margin-left: 430px;
+    gap: 50px;
+    margin-left: 100px;
+    margin-top: 40px;
+    align-items: stretch;
 }
+
 /* CARTES */
-.about-page .about-cards .card {
-    flex: 1;               /* toutes les cartes même largeur */
-    min-width: 250px;      /* évite qu'elles deviennent trop petites */
+.about-page .cards-row .card {
+    background-color:  rgba(255, 255, 255, 0.15);
+    color: black;
+    box-shadow: none; /* Retire l'ombre */
+    flex: 1;              /* même largeur */
+    display: flex;
+}
+
+/* Conteneur des lignes */
+.card-lines {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Une ligne = icône + texte */
+.card-line {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Icône à gauche */
+.card-icon {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+}
+/* Carte outils */
+.titre-card {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Titre centré */
+.titre-card h3 {
+    font-weight: 600;
+    margin: 20px 0 0 20px;
 }
 
 
