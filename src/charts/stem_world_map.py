@@ -41,6 +41,25 @@ sentinel = real_min - (abs(real_min) * 0.1 + 0.01)
 
 merged_df["STEM_plot"] = merged_df[VALUE_COL].fillna(sentinel)
 
+merged_df["STEM_hover"] = merged_df[VALUE_COL].where(
+    merged_df[VALUE_COL].notna(),
+    "Unknown"
+)
+
+merged_df["Country_hover"] = merged_df["Entity"]
+
+iso3_to_name = {
+    feature["properties"]["iso3"]: feature["properties"]["name"]
+    for feature in world_geojson["features"]
+}
+
+merged_df["Country_hover"] = merged_df.apply(
+    lambda row: iso3_to_name.get(row["plot_iso"])
+    if pd.isna(row["Country_hover"])
+    else row["Country_hover"],
+    axis=1
+)
+
 colorscale = [
     [0.0, "#EDEDED"],
     [0.00001, "#E9F1FB"],
@@ -63,14 +82,22 @@ def create_choropleth(df_year):
         geojson=world_geojson,
         locations="plot_iso",
         color="STEM_plot",
-        hover_name="Entity",
+        hover_name="Country_hover",
+        hover_data=["plot_iso", "STEM_hover"],
         featureidkey="properties.iso3",
         projection="natural earth",
         color_continuous_scale=colorscale,
         range_color=(zmin, zmax),
     )
 
-    fig.update_traces(marker_line_color="#DDDDDD", marker_line_width=0.9)
+    fig.update_traces(
+        marker_line_color="#DDDDDD", 
+        marker_line_width=0.9, 
+        hovertemplate=
+            "<b>%{hovertext}</b><br>"
+            "ISO3: %{customdata[0]}<br>"
+            "STEM (%): %{customdata[1]}<extra></extra>"
+    )
     fig.update_geos(fitbounds="locations", visible=False)
     fig.update_layout(
         margin=dict(l=0, r=0, t=0, b=0),

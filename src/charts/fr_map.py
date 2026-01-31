@@ -16,12 +16,10 @@ df_departments = df[~df['Region'].isin(REGION_NAMES)].copy()
 
 df_departments['Salary_Gap_2022_abs'] = df_departments['Salary_Gap_2022'].abs()
 
-# Charger le GeoJSON des départements français
 with open("data/raw/fr_departments.geojson") as f:
     france_geojson = json.load(f)
 
-# Préparer les données pour la visualisation
-df_departments['Code'] = df_departments['Code'].str.zfill(2)  # Assurer le format 01, 02, etc.
+df_departments['Code'] = df_departments['Code'].str.zfill(2)
 
 df_departments["has_edu_data"] = df_departments["Education_Gap_2021"].notna()
 df_departments["has_sal_data"] = df_departments["Salary_Gap_2022"].notna()
@@ -35,11 +33,17 @@ sentinel_sal = real_min_sal - (abs(real_min_sal) * 0.1 + 0.01)
 df_departments["Education_Gap_plot"] = df_departments["Education_Gap_2021"].fillna(sentinel_edu)
 df_departments["Salary_Gap_plot"] = df_departments["Salary_Gap_2022_abs"].fillna(sentinel_sal)
 
-# Calculer les valeurs min et max pour l'échelle de couleur
+df_departments["Education_Gap_hover"] = df_departments["Education_Gap_2021"].apply(
+    lambda x: x if pd.notna(x) else "Unknown"
+)
+
+df_departments["Salary_Gap_hover"] = df_departments["Salary_Gap_2022_abs"].apply(
+    lambda x: x if pd.notna(x) else "Unknown"
+)
+
 zmin = df_departments["Education_Gap_2021"].min()
 zmax = df_departments["Education_Gap_2021"].max()
 
-# Palette de couleurs - du rose pâle au fuchsia foncé
 colorscale_pink = [
     [0.0, "#EDEDED"],
     [0.00001, "#FBEAF4"],
@@ -69,19 +73,21 @@ colorscale_blue = [
 def create_choropleth(metric):
     if metric == "Disparity in Education":
         color_col = "Education_Gap_plot"
+        hover_col = "Education_Gap_hover"
         subtitle_text = "Women exceeding Men in Higher Education (%)"
         colorscale = colorscale_pink
         z_min = df_departments[color_col].min()
         z_max = df_departments["Education_Gap_2021"].max()
-        hover_template = '<b>%{customdata[0]}</b><br>Écart d\'éducation: %{z:.1f}%<extra></extra>'
+        hover_template = '<b>%{customdata[0]}</b><br>Education Gap: %{customdata[1]}<extra></extra>'
         colorbar_title = "Gap in<br>Education (%)"
     else:
         color_col = "Salary_Gap_plot"
+        hover_col = "Salary_Gap_hover"
         subtitle_text = "Difference in Wage between Women and Men (%)"
         colorscale = colorscale_blue
         z_min = df_departments[color_col].min()
         z_max = df_departments["Salary_Gap_2022_abs"].max()
-        hover_template = '<b>%{customdata[0]}</b><br>Écart salarial: %{z:.1f}%<extra></extra>'
+        hover_template = '<b>%{customdata[0]}</b><br>Wage Gap (%): %{z:.1f}<extra></extra>'
         colorbar_title = "Gap in<br>Wage (%)"
 
     fig = px.choropleth(
@@ -92,7 +98,7 @@ def create_choropleth(metric):
         featureidkey="properties.code",
         color_continuous_scale=colorscale,
         range_color=(z_min, z_max),
-        custom_data=['Region']
+        custom_data=['Region', hover_col]
     )
 
     fig.update_traces(
@@ -103,20 +109,19 @@ def create_choropleth(metric):
 
     fig.update_geos(fitbounds="locations", visible=False)
 
-    # Ajouter texte sous la carte dans le graphique
     fig.update_layout(
         annotations=[
             dict(
                 text=subtitle_text,
-                x=0.55,           # centré horizontalement
-                y=-0,          # sous la carte
+                x=0.55,
+                y=-0,
                 xref="paper",
                 yref="paper",
                 showarrow=False,
                 font=dict(family="SF Pro Display", size=18, color="#333333")
             )
         ],
-        margin=dict(l=0, r=0, t=0, b=0),  # laisser un peu d'espace en bas
+        margin=dict(l=0, r=0, t=0, b=0),
         coloraxis_colorbar=dict(
             title=colorbar_title,
             thickness=30,

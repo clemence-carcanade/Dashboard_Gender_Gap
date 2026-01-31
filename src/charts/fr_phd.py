@@ -113,7 +113,11 @@ def update_fr_random_histogram(selected_year):
             "discipline": "Sciences",
             selected_year: "Women (%)"
         },
-        hover_data=["discipline"]
+        custom_data=["discipline", selected_year]
+    )
+
+    fig.update_traces(
+        hovertemplate="<b>%{customdata[0]}</b><br>Women (%): %{customdata[1]:.1f}<extra></extra>"
     )
 
     fig.update_layout(

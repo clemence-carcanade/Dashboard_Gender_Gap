@@ -87,7 +87,7 @@ def create_bar_figure(selected_metric):
         )
 
         fig.update_traces(
-            hovertemplate='<b>%{x}</b><br>Départements: %{y}<extra></extra>'
+            hovertemplate='<b>%{x}</b><br>Departments: %{y}<extra></extra>'
         )
 
         fig.update_layout(yaxis_title="Departments number")
