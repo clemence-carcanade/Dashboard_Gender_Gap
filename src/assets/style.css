@@ -143,48 +143,6 @@ body, #_dash-app-content {
     font-size: 20px;
 }
 
-/* CARTES */
-.about-page .cards-row .card {
-    background-color:  rgba(255, 255, 255, 0.15);
-    color: black;
-    box-shadow: none; /* Retire l'ombre */
-    flex: 1;              /* même largeur */
-    display: flex;
-}
-
-/* Conteneur des lignes */
-.card-lines {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-/* Une ligne = icône + texte */
-.card-line {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-/* Icône à gauche */
-.card-icon {
-    width: 44px;
-    height: 44px;
-    flex-shrink: 0;
-}
-/* Carte outils */
-.titre-card {
-    display: flex;
-    flex-direction: column;
-}
-
-/* Titre centré */
-.titre-card h3 {
-    font-weight: 600;
-    margin: 20px 0 0 20px;
-}
-
-
 /*SEGMENTED CONTROL*/
 .segmented_control {
     background: linear-gradient(to bottom, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.2));
