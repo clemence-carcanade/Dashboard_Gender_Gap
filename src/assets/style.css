@@ -38,8 +38,9 @@
     font-size: 18px;
 }
 
-body{
-    height: auto;
+body, #_dash-app-content {
+    margin: 0;
+    padding: 0;
 }
 
 /*NAVBAR*/
@@ -100,6 +101,7 @@ body{
 .home-page {
     margin: 12%;
     margin-top: 130px;
+    margin-bottom: 100px;
     display: flex;
     flex-direction: column;
     gap: 30px;
@@ -446,4 +448,55 @@ Button:hover{
 .bookmarks label:has(input:checked)::after {
     border-top: 20px solid var(--dark-pink);
     border-bottom: 20px solid var(--dark-pink);
+}
+
+/*FOOTER*/
+.footer {
+    background-color: var(--pink);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 30px;
+}
+
+.footer_logo {
+    height: 120px;
+    width: auto;
+}
+
+.footer_top {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+}
+
+.footer_icons {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.footer_links {
+    display: flex;
+}
+
+.footer_links ul {
+    list-style-type: none;
+}
+
+.footer_links li {
+    display: flex;
+}
+
+.footer_links a {
+    text-decoration: none;
+    color: white;
+}
+
+.logo_links {
+    height: 50px;
+}
+
+.footer_bottom {
+    text-align: center;
 }
