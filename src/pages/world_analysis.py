@@ -6,14 +6,13 @@ def layout():
         className="world_analysis_written",
         children=[
             create_card(
-                html.H3("What lies behind the Data"),
                 html.P(["Looking at the data from the ", html.B("Gender Inequality Index (GII)"), ", clear geographical patterns emerge. Nordic countries such as Denmark, Sweden, and Finland consistently rank among the most gender-equal nations, while many Sahelian countries tend to marginalise women and face persistent inequalities."])
             ),
             html.Div(
                 className="background-glow",
                 style={
                     "--color": "var(--pink)",
-                    "--top": "1400px",
+                    "--top": "1480px",
                     "--left": "50px"
                 }
             ),
@@ -21,7 +20,7 @@ def layout():
                 className="background-glow",
                 style={
                     "--color": "var(--blue)",
-                    "--top": "2000px",
+                    "--top": "2060px",
                     "--right": "300px"
                 }
             ),
@@ -29,7 +28,7 @@ def layout():
                 className="background-glow",
                 style={
                     "--color": "var(--pink)",
-                    "--top": "2600px",
+                    "--top": "2660px",
                     "--left": "50px"
                 }
             ),
@@ -43,7 +42,7 @@ def layout():
                     html.Img(
                         src="/assets/images/money.png",
                         className="icon_3d",
-                        alt="diploma 3d icon"
+                        alt="money 3d icon"
                     ),
                 ]
             ),
@@ -73,13 +72,13 @@ def layout():
                 className="illustrated_text",
                 children=[
                     create_card(
-                        html.P(["Looking more closely at the share of women in STEM (Science, Technology, Engineering, and Mathematics) in 2016 reveals a striking and ", html.B("counterintuitive pattern"), ". Countries that are rarely associated with high levels of gender equality—such as Algeria, Niger, Syria, and Tunisia—ranked among those with the highest proportions of women in STEM fields. By contrast, nations commonly viewed as models of economic prosperity and gender progress, including Switzerland, appeared at the bottom of the ranking, alongside countries such as Chile and Burkina Faso. In the latter case, low female representation can be directly attributed to extreme poverty and limited access to education, which severely restrict girls’ schooling opportunities from an early age."]),
-                        html.P(["However, low female participation in STEM does not always result from a lack of resources or formal equality. This apparent contradiction is captured by the concept of the ", html.B(html.I("Gender Equality Paradox")), ", identified by Gijsbert Stoet and David C. Geary in 2018. Their research shows that in the most gender-equal and affluent societies, women are less likely to pursue STEM careers. In countries such as Switzerland, where the standard of living is high and social safety nets are strong, women have greater freedom to choose fields of study based on ", html.B("personal interest"), " rather than ", html.B("economic necessity"), ". As a result, many turn toward non-STEM disciplines, such as languages or the humanities. By contrast, in emerging countries like Algeria or Tunisia, STEM fields are widely perceived as ", html.B("reliable pathways"), " to social mobility and financial stability, making them more attractive to women despite persistent gender inequalities."])
+                        html.P(["A closer look at women’s participation in STEM in 2016 reveals a ", html.B("striking paradox"), ". Countries rarely associated with high gender equality—such as Algeria, Niger, Syria, and Tunisia—rank among those with the highest shares of women in STEM, while economically prosperous and highly egalitarian countries like Switzerland appear near the bottom, alongside Chile and Burkina Faso. In the latter case, low participation is largely explained by extreme poverty and limited access to education, but not always."]),
+                        html.P(["This counterintuitive pattern is known as the ", html.B(html.I("Gender Equality Paradox")), ", identified by Gijsbert Stoet and David C. Geary in 2018. Their research shows that in the most gender-equal and affluent societies, women are less likely to choose STEM careers, often because strong social safety nets allow them to pursue fields aligned with ", html.B("personal interest"), " rather than ", html.B("economic necessity"), ". In contrast, in emerging countries such as Algeria or Tunisia, STEM fields are perceived as ", html.B("reliable pathways"), " to social mobility and financial stability, making them more attractive to women despite persistent gender inequalities."])
                     ),
                     html.Img(
                         src="/assets/images/sign_gender.png",
                         className="icon_3d big",
-                        alt="politic 3d icon"
+                        alt="sign gender 3d icon"
                     ),
                 ]
             ),

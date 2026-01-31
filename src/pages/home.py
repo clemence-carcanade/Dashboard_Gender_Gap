@@ -14,6 +14,8 @@ from src.charts.fr_map import education_map_layout as education_map_layout
 from src.charts.fr_board import layout as fr_board_layout
 from src.charts.fr_university import layout as university_layout
 from src.charts.fr_phd import layout as phd_layout
+from src.pages.france_analysis import layout as france_layout
+from src.pages.study_analysis import layout as study_layout
 
 def layout():
     return html.Div(
@@ -39,7 +41,7 @@ def layout():
                 className="background-glow",
                 style={
                     "--color": "var(--blue)",
-                    "--top": "500px",
+                    "--top": "575px",
                     "--right": "450px"
                 }
             ),
@@ -57,6 +59,12 @@ def layout():
                         alt="gender_equality_balance"
                     )
                 ]
+            ),
+            html.H1(
+                "World Analysis",
+                style={"textAlign": "center",
+                       "marginTop": "5px",
+                       "marginBottom": "5px"}
             ),
             html.Div(
                 className="quote",
@@ -98,6 +106,12 @@ def layout():
                 ]
             ),
             world_layout(),
+            html.H1(
+                "France Analysis",
+                style={"textAlign": "center",
+                       "marginTop": "5px",
+                       "marginBottom": "5px"}
+            ),
             create_segmented_control(
                 options=["Disparity in Education", "Wage Inequality"],
                 className="segmented_control",
@@ -114,6 +128,7 @@ def layout():
                     html.Div(id="france_visualization_container")
                 ]
             ),
+            france_layout(),
             create_segmented_control(
                 options=["Bachelor's Degree Fields", "PhD Fields"],
                 className="segmented_control",
@@ -124,6 +139,34 @@ def layout():
                 children=[
                     html.Div(id="france_study_visualization_container")
                 ]
+            ),
+            study_layout(),
+            html.H1(
+                "Conclusion",
+                style={"textAlign": "center",
+                       "marginTop": "5px",
+                       "marginBottom": "5px"}
+            ),
+            create_card(
+                html.P(["Across countries and regions, our analysis reveals a consistent pattern: gender inequalities in science are shaped not only by access to education, but also by economic structures, social norms, and deeply rooted stereotypes. While women increasingly outperform men in educational attainment—both globally and in France—this advantage does not translate into equal representation in STEM fields or into equal economic outcomes."]),
+                html.P(["From the Gender Inequality Index to national and regional data, the same dynamics emerge: women remain concentrated in certain disciplines, while technological and high-paying fields continue to be largely male-dominated. Whether driven by poverty, social constraints, or the Gender Equality Paradox observed in the most egalitarian societies, these inequalities persist across contexts."]),
+                html.P(html.B("Ultimately, closing the gender gap in science requires more than formal equality or educational access. It calls for a transformation of cultural norms, institutional practices, and professional environments so that women can not only enter scientific fields, but also thrive and fully contribute to innovation.")),
+            ),
+            html.Div(
+                className="background-glow",
+                style={
+                    "--color": "var(--blue)",
+                    "--top": "6000px",
+                    "--right": "50px"
+                }
+            ),
+            html.Div(
+                className="background-glow",
+                style={
+                    "--color": "var(--pink)",
+                    "--top": "6150px",
+                    "--left": "50px"
+                }
             ),
         ]
     )
