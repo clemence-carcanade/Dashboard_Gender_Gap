@@ -143,62 +143,6 @@ body, #_dash-app-content {
     font-size: 20px;
 }
 
-/* ABOUT US */
-.about-page {
-    margin: 12%;
-    margin-top: 130px;
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-    position: relative;
-    font-family: SF Pro Display;
-    font-size: 1.1rem;
-    line-height: 1.6;
-}
-
-/* Conteneur pour image + texte côte à côte */
-.about-page .content-row {
-    display: flex;
-    flex-direction: row;
-    gap: 40px; /* Espace entre l'image et le texte */
-}
-
-/* Image du logo */
-.about-page .logo-image {
-    width: 400px; /* Ajustez la taille selon vos besoins */
-    height: auto; /* Garde les proportions */
-    object-fit: contain; /* Évite la déformation */
-    flex-shrink: 0; /* Empêche l'image de rétrécir */
-    margin-top: 100px;
-}
-
-/* Gros conteneur de texte */
-.about-page .main-text-container {
-    background: rgba(255, 255, 255, 0.35);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 20px;
-    padding: 40px;
-    flex: 1; /* Prend l'espace restant à côté de l'image */
-}
-
-.about-page .main-text-container h1 {
-    margin: 0 0 20px 0;
-    font-size: 3rem;
-    font-weight: 700;
-}
-
-.about-page .main-text-container p {
-    margin: 0;
-}
-
-.about-page .cards-row {
-    display: flex;
-    gap: 50px;
-    margin-left: 100px;
-    margin-top: 40px;
-    align-items: stretch;
-}
-
 /* CARTES */
 .about-page .cards-row .card {
     background-color:  rgba(255, 255, 255, 0.15);
@@ -496,6 +440,33 @@ Button:hover{
 .bookmarks label:has(input:checked)::after {
     border-top: 20px solid var(--dark-pink);
     border-bottom: 20px solid var(--dark-pink);
+}
+
+/* ABOUT US */
+.about_page {
+    margin: 12%;
+    margin-top: 130px;
+    margin-bottom: 100px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.content_row {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+}
+
+.about_img {
+    width: 400px;
+    height: auto;
+}
+
+.cards_row {
+    display: flex;
+    gap: 30px;
+    align-items: center;
 }
 
 /*FOOTER*/

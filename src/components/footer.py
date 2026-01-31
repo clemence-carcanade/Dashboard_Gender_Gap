@@ -32,12 +32,12 @@ def create_footer():
                         children=[
                             html.Ul([
                                 html.Li(html.B("Thaïs Castillo")),
-                                html.Li("Apprentie Cheffe de Projet - Crédit Agricole"),
+                                html.Li("Projet Manager Apprentice - Crédit Agricole"),
                                 html.Li("thais.castillo@edu.esiee.fr"),
                             ]),
                             html.Ul([
                                 html.Li(html.B("Clémence Carcanade")),
-                                html.Li("Apprentie Ingénieure Logiciel et IA - Dassault Systèmes"),
+                                html.Li("Software and IA Engineer Apprentice - Dassault Systèmes"),
                                 html.Li("clemence.carcanade@edu.esiee.fr"),
                             ])
                         ]

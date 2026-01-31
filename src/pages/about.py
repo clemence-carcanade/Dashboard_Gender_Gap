@@ -1,140 +1,89 @@
 from dash import html
 from src.components.card import create_card
 
-
 def layout():
     return html.Div(
-        className="about-page",
+        className="about_page",
         children=[
             html.Div(
                 className="background-glow",
                 style={
                     "--color": "var(--pink)",
-                    "--top": "90px",
-                    "--right": "450px"
-                }
-            ),
-            
-            html.Div(
-                className="background-glow",
-                style={
-                    "--color": "var(--blue)",
-                    "--top": "500px",
-                    "--right": "450px"
+                    "--top": "60px",
+                    "--right": "550px"
                 }
             ),
             html.Div(
                 className="background-glow",
                 style={
                     "--color": "var(--pink)",
-                    "--top": "350px",
-                    "--left": "50px"
+                    "--top": "600px",
+                    "--left": "100px"
                 }
             ),
             html.Div(
                 className="background-glow",
                 style={
                     "--color": "var(--blue)",
-                    "--top": "50px",
-                    "--right": "-20px"
+                    "--top": "350px",
+                    "--right": "50px"
                 }
             ),
             html.Div(
                 className="background-glow",
                 style={
-                    "--color": "var(--pink)",
-                    "--top": "350px",
-                    "--right": "-20px"
+                    "--color": "var(--blue)",
+                    "--top": "900px",
+                    "--right": "600px"
                 }
             ),
-            # Gros conteneur de texte
             html.Div(
-                className="content-row",
+                className="content_row",
                 children=[
                         html.Img(
-                        src="/assets/images/Clems_Logo.png",
-                        className="logo-image",
-                        alt="clem_logo"
-                    ),
-                        html.Div(
-                            className="main-text-container",
-                            children=[
-                                html.H1("About us..."),
-                                html.P("This Dashboard was created as part of an academic project for the ESIEE Paris engineering school in the Computer Science and Applications apprenticeship program, by Clémence Carcanade, apprentice at Dassault Système, and Thaïs Castillo, apprentice at Crédit Agricole Payment Services.")
-                            ]
+                            src="/assets/images/illustration.png",
+                            className="about_img",
+                            alt="Illustration of our work group"
                         ),
-                        # Petits conteneurs alignés en dessous
+                        create_card(
+                            html.H1("About us"),
+                            html.P(["This dashboard was developed as part of an academic project at ", html.B("ESIEE Paris"), ", within the Computer Science and Applications apprenticeship program. It was created by Clémence Carcanade, apprentice Software & AI Engineer at Dassault Systèmes, and Thaïs Castillo, apprentice Project Manager at Crédit Agricole Payment Services."]),
+                            html.P(["As two future engineers, we are particularly committed to questions of ", html.B("gender equality in science"), ", a field where women remain underrepresented despite their central role in innovation."])
+                        ),
                 ]
             ),
+            create_card(
+                html.H3("Why gender equality in STEM matters ?"),
+                html.P(["Innovation is often presented as a driver of economic growth and social progress. Yet, in many countries, access to scientific education and technological careers remains deeply unequal. Gender disparities in STEM are not only an issue of fairness: they directly affect the ", html.B("long-term development of our societies.")]),
+                html.P("Understanding where these gaps persist—and how they vary across regions—helps highlight the structural barriers women face and the progress that still needs to be made. By combining global indicators with a focused analysis of France, this project aims to contribute to a clearer, data-driven understanding of these inequalities, and to a broader reflection on how society can—and must—become more inclusive.")
+            ),
             html.Div(
-                            className="cards-row",
-                            children=[
-                                create_card(
-                                    html.Div(
-                                        className="titre-card",
-                                        children=[
-                                            html.H3("Project goals :"),
-                                            html.Br(),
-                                            "This dashboard highlights a major societal issue: the link between global innovation and the inclusion of women. We first analyze the Global Innovation Index (GII), before examining the proportion of women in STEM fields internationally. Finally, we take a specific look at France, examining disparities in higher education and wage gaps.",
-                                            html.Br(),
-                                        ]
-                                    )
-                                ),
-                                create_card(
-    html.Div(
-        className="titre-card",
-        children=[
-            html.H3("Tools used"),
-            html.Div(
-                className="card-lines",
+                className="cards_row",
                 children=[
-                    html.Div(
-                        className="card-line",
-                        children=[
-                            html.Img(
-                                src="/assets/images/python.png",
-                                className="card-icon"
-                            ),
-                            html.Span("Python 3.12")
-                        ]
+                    create_card(
+                        html.H3("Project Organization"),
+                        html.Ul([
+                            html.Li([
+                                html.B("Thaïs Castillo — "),
+                                "Produced the visualizations for the world analysis and for the fields of study chosen by women in France, and wrote the analytical interpretations of all charts, grounding the data in a broader social and political perspective."
+                            ]),
+                            html.Li([
+                                html.B("Clémence Carcanade — "),
+                                "Developed the visualizations on education and wage gaps in France and designed the entire front-end of the dashboard, transforming data into an coherent and engaging public-facing tool."
+                            ]),
+                        ]),
+                        html.P("This collaboration reflects our shared belief that technical skills and social engagement are not separate, but complementary.")
                     ),
-                    html.Div(
-                        className="card-line",
-                        children=[
-                            html.Img(
-                                src="/assets/images/pandas_white.png",
-                                className="card-icon"
-                            ),
-                            html.Span("Pandas")
-                        ]
-                    ),
-                    html.Div(
-                        className="card-line",
-                        children=[
-                            html.Img(
-                                src="/assets/images/css.png",
-                                className="card-icon"
-                            ),
-                            html.Span("CSS")
-                        ]
-                    ),
-                    html.Div(
-                        className="card-line",
-                        children=[
-                            html.Img(
-                                src="/assets/images/plotly.webp",
-                                className="card-icon"
-                            ),
-                            html.Span("Plotly, Dash")
-                        ]
+                    html.Img(
+                        src="/assets/images/tools.png",
+                        className="about_img",
+                        alt="Tools used for the project"
                     ),
                 ]
             ),
-        ]
-    )
-)
-,
-                            ]
-                        )   
+            create_card(
+                html.H3("Data and Sources"),
+                html.P(["This dashboard is based on ", html.B("publicly available datasets"), " from international and national institutions. Visualizations are designed to make complex indicators more accessible while preserving data integrity."])
+            )
         ]
     )
