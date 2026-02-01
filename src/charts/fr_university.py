@@ -4,6 +4,7 @@ from dash import html, dcc, Input, Output, callback
 import pandas as pd
 import csv
 from src.components.segmented_control import create_segmented_control
+from config import COLORSCALE_PINK
 
 discipline_translation = {
     "Universités - Formations scientifiques y compris ingénieurs": "Engineering",
@@ -53,18 +54,6 @@ df["discipline"] = df["discipline"].str.strip().replace(discipline_translation)
 
 years = ["2010-2011", "2020-2021"]
 
-colorscale = [
-    [0.0, "#EDEDED"],
-    [0.1, "#F4C3E0"],
-    [0.2, "#EDA1CE"],
-    [0.3, "#E576B8"],
-    [0.4, "#DE4FA5"],
-    [0.6, "#D62991"],
-    [0.8, "#B02177"],
-    [0.9, "#891A5D"],
-    [1.0, "#631343"],
-]
-
 def layout():
     return html.Div(
         className="data_container",
@@ -100,7 +89,7 @@ def update_fr_university_histogram(selected_year):
         y="discipline",
         x=selected_year,
         color=selected_year,
-        color_continuous_scale=colorscale,
+        color_continuous_scale=COLORSCALE_PINK,
         range_color=(0, 100),
         labels={
             "discipline": "Sciences",

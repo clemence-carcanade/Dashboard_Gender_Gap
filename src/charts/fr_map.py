@@ -2,6 +2,7 @@ import json
 import pandas as pd
 import plotly.express as px
 from dash import html, dcc
+from config import COLORSCALE_BLUE, COLORSCALE_PINK
 
 df = pd.read_csv("data/cleaned/fr_regions_gender_inequality_cleaned.csv")
 
@@ -44,38 +45,12 @@ df_departments["Salary_Gap_hover"] = df_departments["Salary_Gap_2022_abs"].apply
 zmin = df_departments["Education_Gap_2021"].min()
 zmax = df_departments["Education_Gap_2021"].max()
 
-colorscale_pink = [
-    [0.0, "#EDEDED"],
-    [0.00001, "#FBEAF4"],
-    [0.1, "#F4C3E0"],
-    [0.2, "#EDA1CE"],
-    [0.3, "#E576B8"],
-    [0.4, "#DE4FA5"],
-    [0.5, "#D62991"],
-    [0.6, "#B02177"],
-    [0.7, "#891A5D"],
-    [1.0, "#631343"],
-]
-
-colorscale_blue = [
-    [0.0, "#EDEDED"],
-    [0.00001, "#E9F1FB"],
-    [0.1, "#C2D7F5"],
-    [0.2, "#9BBDEE"],
-    [0.3, "#73A4E7"],
-    [0.4, "#2570DA"],
-    [0.5, "#1E5CB3"],
-    [0.6, "#18488C"],
-    [0.7, "#113464"],
-    [1.0, "#0A1F3D"],
-]
-
 def create_choropleth(metric):
     if metric == "Disparity in Education":
         color_col = "Education_Gap_plot"
         hover_col = "Education_Gap_hover"
         subtitle_text = "Women exceeding Men in Higher Education (%)"
-        colorscale = colorscale_pink
+        colorscale = COLORSCALE_PINK
         z_min = df_departments[color_col].min()
         z_max = df_departments["Education_Gap_2021"].max()
         hover_template = '<b>%{customdata[0]}</b><br>Education Gap: %{customdata[1]}<extra></extra>'
@@ -84,7 +59,7 @@ def create_choropleth(metric):
         color_col = "Salary_Gap_plot"
         hover_col = "Salary_Gap_hover"
         subtitle_text = "Difference in Wage between Women and Men (%)"
-        colorscale = colorscale_blue
+        colorscale = COLORSCALE_BLUE
         z_min = df_departments[color_col].min()
         z_max = df_departments["Salary_Gap_2022_abs"].max()
         hover_template = '<b>%{customdata[0]}</b><br>Wage Gap (%): %{z:.1f}<extra></extra>'

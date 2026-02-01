@@ -6,6 +6,7 @@ from dash import html, dcc, callback
 from dash.dependencies import Input, Output
 from src.components.segmented_control import create_segmented_control
 from src.charts.slider import create_slider
+from config import COLORSCALE_BLUE
 
 df = pd.read_csv("data/raw/world_women_in_stem.csv")
 world = gpd.read_file("data/cleaned/world_boundaries_simplified.geojson")
@@ -60,19 +61,6 @@ merged_df["Country_hover"] = merged_df.apply(
     axis=1
 )
 
-colorscale = [
-    [0.0, "#EDEDED"],
-    [0.00001, "#E9F1FB"],
-    [0.1, "#C2D7F5"],
-    [0.2, "#9BBDEE"],
-    [0.3, "#73A4E7"],
-    [0.4, "#2570DA"],
-    [0.5, "#1E5CB3"],
-    [0.6, "#18488C"],
-    [0.7, "#113464"],
-    [1.0, "#0A1F3D"],
-]
-
 zmin = sentinel
 zmax = merged_df["STEM_plot"].max()
 
@@ -86,7 +74,7 @@ def create_choropleth(df_year):
         hover_data=["plot_iso", "STEM_hover"],
         featureidkey="properties.iso3",
         projection="natural earth",
-        color_continuous_scale=colorscale,
+        color_continuous_scale=COLORSCALE_BLUE,
         range_color=(zmin, zmax),
     )
 

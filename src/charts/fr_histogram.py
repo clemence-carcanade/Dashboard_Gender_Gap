@@ -1,6 +1,7 @@
 import plotly.express as px
 from dash import html, dcc
 import pandas as pd
+from config import COLORSCALE_BLUE, COLORSCALE_PINK
 
 df = pd.read_csv("data/cleaned/fr_regions_gender_inequality_cleaned.csv")
 
@@ -32,24 +33,6 @@ df_departments['Salary_Gap_Range'] = pd.cut(
     labels=labels,
     include_lowest=True
 )
-
-colorscale_pink = [
-    [0.0, "#F4C3E0"],
-    [0.2, "#EDA1CE"],
-    [0.4, "#E576B8"],
-    [0.6, "#DE4FA5"],
-    [0.8, "#D62991"],
-    [1.0, "#B02177"],
-]
-
-colorscale_blue = [
-    [0.0, "#9BBDEE"],
-    [0.2, "#73A4E7"],
-    [0.4, "#2570DA"],
-    [0.6, "#1E5CB3"],
-    [0.8, "#18488C"],
-    [1.0, "#113464"],
-]
 
 def education_bars_layout(metric):
     fig = create_bar_figure(metric)
@@ -83,7 +66,7 @@ def create_bar_figure(selected_metric):
                 'count': "Nombre de départements"
             },
             color='count',
-            color_continuous_scale=colorscale_pink
+            color_continuous_scale=COLORSCALE_PINK
         )
 
         fig.update_traces(
@@ -109,7 +92,7 @@ def create_bar_figure(selected_metric):
                 'count': "Nombre de départements"
             },
             color='count',
-            color_continuous_scale=colorscale_blue
+            color_continuous_scale=COLORSCALE_BLUE
         )
 
         fig.update_traces(

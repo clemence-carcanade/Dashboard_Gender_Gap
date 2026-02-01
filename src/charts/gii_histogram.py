@@ -3,6 +3,7 @@ from dash import Input, Output, html, dcc, callback
 import pandas as pd
 from src.charts.slider import create_slider
 from src.components.segmented_control import create_segmented_control
+from config import COLORSCALE_PINK
 
 df = pd.read_csv("data/raw/world_GII.csv")
 
@@ -19,19 +20,6 @@ df_long['Year'] = df_long['Year'].str.extract(r'(\d{4})').astype(int)
 df_long = df_long.dropna(subset=['GII'])
 years = sorted(df_long["Year"].unique())
 continent = ["All"] + sorted(df_long["Continent"].dropna().unique())
-
-colorscale = [
-    [0.0, "#EDEDED"],
-    [0.00001, "#FBEAF4"],
-    [0.1, "#F4C3E0"],
-    [0.2, "#EDA1CE"],
-    [0.3, "#E576B8"],
-    [0.4, "#DE4FA5"],
-    [0.5, "#D62991"],
-    [0.6, "#B02177"],
-    [0.7, "#891A5D"],
-    [1.0, "#631343"],
-]
 
 zmin = df_long["GII"].min()
 zmax = df_long["GII"].max()
@@ -76,7 +64,7 @@ def update_map(selected_year, selected_continent):
         y='GII',
         labels={'GII': 'GII', "Country": 'Countries', "Country_short": "Countries"},
         color='GII',
-        color_continuous_scale=colorscale,
+        color_continuous_scale=COLORSCALE_PINK,
         hover_data={
             "Country": True,
             "GII": True,

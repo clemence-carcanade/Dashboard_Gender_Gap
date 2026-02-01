@@ -3,6 +3,7 @@ from dash import html, dcc, Input, Output, callback
 import pandas as pd
 import csv
 from src.components.segmented_control import create_segmented_control
+from config import COLORSCALE_BLUE
 
 discipline_translation = {
     "Sciences exactes et leurs applications": "Exact fields",
@@ -60,18 +61,6 @@ df["discipline"] = (
 
 years = ["2010-2011", "2020-2021"]
 
-colorscale = [
-    [0.0, "#EDEDED"],
-    [0.1, "#C2D7F5"],
-    [0.2, "#9BBDEE"],
-    [0.3, "#73A4E7"],
-    [0.4, "#2570DA"],
-    [0.5, "#1E5CB3"],
-    [0.6, "#18488C"],
-    [0.7, "#113464"],
-    [1.0, "#0A1F3D"],
-]
-
 def layout():
     return html.Div(
         className="data_container",
@@ -107,7 +96,7 @@ def update_fr_random_histogram(selected_year):
         y="discipline",
         x=selected_year,
         color=selected_year,
-        color_continuous_scale=colorscale,
+        color_continuous_scale=COLORSCALE_BLUE,
         range_color=(0, 100),
         labels={
             "discipline": "Sciences",

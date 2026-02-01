@@ -2,6 +2,7 @@ import plotly.express as px
 from dash import Input, Output, html, dcc, callback
 import pandas as pd
 from src.charts.slider import create_slider
+from config import COLORSCALE_BLUE
 
 df = pd.read_csv("data/raw/world_women_in_stem.csv")
 
@@ -13,19 +14,6 @@ years = sorted(
     y for y in df["Year"].unique()
     if y not in (1998, 2019)
 )
-
-colorscale = [
-    [0.0, "#EDEDED"],
-    [0.00001, "#E9F1FB"],
-    [0.1, "#C2D7F5"],
-    [0.2, "#9BBDEE"],
-    [0.3, "#73A4E7"],
-    [0.4, "#2570DA"],
-    [0.5, "#1E5CB3"],
-    [0.6, "#18488C"],
-    [0.7, "#113464"],
-    [1.0, "#0A1F3D"],
-]
 
 zmin = df[VALUE_COL].min()
 zmax = df[VALUE_COL].max()
@@ -59,7 +47,7 @@ def update_stem_histogram(selected_year):
         x=x_col,
         y=VALUE_COL,
         color=VALUE_COL,
-        color_continuous_scale=colorscale,
+        color_continuous_scale=COLORSCALE_BLUE,
         labels={
             VALUE_COL: "Women in<br>STEM (%)",
             "Entity": "Countries",

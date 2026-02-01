@@ -6,6 +6,7 @@ from dash import html, dcc, callback
 from dash.dependencies import Input, Output
 from src.charts.slider import create_slider
 from src.components.segmented_control import create_segmented_control
+from config import COLORSCALE_PINK
 
 df = pd.read_csv("data/raw/world_GII.csv")
 world = gpd.read_file("data/cleaned/world_boundaries_simplified.geojson")
@@ -63,19 +64,6 @@ merged_df["Country_hover"] = merged_df.apply(
     axis=1
 )
 
-colorscale = [
-    [0.0, "#EDEDED"],
-    [0.00001, "#FBEAF4"],
-    [0.1, "#F4C3E0"],
-    [0.2, "#EDA1CE"],
-    [0.3, "#E576B8"],
-    [0.4, "#DE4FA5"],
-    [0.5, "#D62991"],
-    [0.6, "#B02177"],
-    [0.7, "#891A5D"],
-    [1.0, "#631343"],
-]
-
 zmin = merged_df["GII_plot"].min()
 zmax = merged_df["GII_plot"].max()
 
@@ -89,7 +77,7 @@ def create_choropleth(df_year):
         hover_data=["ISO3", "GII_hover"],
         featureidkey="properties.iso3",
         projection="natural earth",
-        color_continuous_scale=colorscale,
+        color_continuous_scale=COLORSCALE_PINK,
         range_color=(zmin, zmax)
     )
     fig.update_traces(
