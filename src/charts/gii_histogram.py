@@ -2,7 +2,7 @@ from dash import Input, Output, html, dcc, callback
 from src.charts.slider import create_slider
 from src.components.segmented_control import create_segmented_control
 from config import COLORSCALE_PINK
-from src.utils.get_data import get_gii_long_format
+from src.utils.prepare_data import get_gii_long_format
 from src.utils.chart import create_bar_chart
 
 df_long = get_gii_long_format()

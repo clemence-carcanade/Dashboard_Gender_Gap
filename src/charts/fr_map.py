@@ -1,7 +1,7 @@
 import pandas as pd
 from dash import html, dcc
 from config import COLORSCALE_BLUE, COLORSCALE_PINK
-from src.utils.get_data import get_fr_departments_data, get_fr_geojson
+from src.utils.prepare_data import get_fr_departments_data, get_fr_geojson
 from src.utils.chart import create_france_choropleth
 
 df_departments = get_fr_departments_data()

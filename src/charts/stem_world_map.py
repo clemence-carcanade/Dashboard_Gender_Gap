@@ -3,7 +3,7 @@ from dash.dependencies import Input, Output
 from src.components.segmented_control import create_segmented_control
 from src.charts.slider import create_slider
 from config import COLORSCALE_BLUE
-from src.utils.get_data import get_stem_data, get_stem_filtered_years, get_world_geojson, prepare_world_choropleth_data
+from src.utils.prepare_data import get_stem_data, get_stem_filtered_years, get_world_geojson, prepare_world_choropleth_data
 from src.utils.chart import create_world_choropleth, update_projection
 
 VALUE_COL = ("Female share of graduates from Science, Technology, Engineering and Mathematics (STEM) programmes, tertiary (%)")

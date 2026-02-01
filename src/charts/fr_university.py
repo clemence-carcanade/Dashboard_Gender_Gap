@@ -1,7 +1,7 @@
 from dash import html, dcc, Input, Output, callback
 from src.components.segmented_control import create_segmented_control
 from config import COLORSCALE_PINK
-from src.utils.get_data import get_fr_university_data
+from src.utils.prepare_data import get_fr_university_data
 from src.utils.chart import create_bar_chart
 
 df = get_fr_university_data()

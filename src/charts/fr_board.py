@@ -1,7 +1,7 @@
 from dash import html, callback
 from dash.dependencies import Input, Output
 from src.components.segmented_control import create_segmented_control
-from src.utils.get_data import get_fr_departments_data
+from src.utils.prepare_data import get_fr_departments_data
 
 df_departments = get_fr_departments_data()
 
@@ -46,7 +46,6 @@ def layout():
             ),
         ]
     )
-
 
 @callback(
     [Output("leaders_section_france", "style"),

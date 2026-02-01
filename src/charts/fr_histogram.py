@@ -1,6 +1,6 @@
 from dash import html, dcc
 from config import COLORSCALE_BLUE, COLORSCALE_PINK
-from src.utils.get_data import get_fr_departments_data, add_bins_to_dataframe
+from src.utils.prepare_data import get_fr_departments_data, add_bins_to_dataframe
 from src.utils.chart import create_histogram_by_range
 
 df_departments = get_fr_departments_data()

@@ -1,7 +1,7 @@
 from dash import Input, Output, html, dcc, callback
 from src.charts.slider import create_slider
 from config import COLORSCALE_BLUE
-from src.utils.get_data import get_stem_data, get_stem_filtered_years
+from src.utils.prepare_data import get_stem_data, get_stem_filtered_years
 from src.utils.chart import create_bar_chart
 
 VALUE_COL = ("Female share of graduates from Science, Technology, Engineering and Mathematics (STEM) programmes, tertiary (%)")

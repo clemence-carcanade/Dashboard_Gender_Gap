@@ -1,205 +1,165 @@
-import json
-import csv
-import pandas as pd
-import geopandas as gpd
+import requests
+from pathlib import Path
+import time
 
-REGION_NAMES_FR = [
-    'Île-de-France', 'Centre-Val de Loire', 'Bourgogne-Franche-Comté', 
-    'Normandie', 'Hauts-de-France', 'Grand Est', 'Pays de la Loire', 
-    'Bretagne', 'Nouvelle-Aquitaine', 'Occitanie', 'Auvergne-Rhône-Alpes',
-    'Provence-Alpes-Côte d\'Azur', 'Corse', 'France métropolitaine hors Ile-de-France',
-    'France métropolitaine', 'Guadeloupe', 'Martinique', 'Guyane', 'La Réunion',
-    'DROM hors Mayotte', 'France hors Mayotte'
-]
-
-DISCIPLINE_TRANSLATION_PHD = {
-    "Sciences exactes et leurs applications": "Exact fields",
-    "Mathématiques et leurs interactions": "Mathematics",
-    "Physique": "Physics",
-    "Sciences de la Terre et de l'Univers, espace": "Earth & space",
-    "Chimie et sciences des matériaux": "Chemistry & materials",
-    "Sciences pour l'ingénieur": "Engineering",
-    "Sciences et technologies de l'information et de la communication": "Computer science & ICT",
-    "Sciences du vivant": "Life",
-    "Biologie, médecine et santé": "Biology & health",
-    "Sciences agronomiques et écologiques": "Agriculture & environment",
-    "Sciences humaines et sociales": "Social",
-    "Sciences humaines et humanités": "Humanities",
-    "Sciences de la société": "Society",
-    "Ensemble des doctorants": "All PhD"
-}
-
-DISCIPLINE_TRANSLATION_UNIVERSITY = {
-    "Universités - Formations scientifiques y compris ingénieurs": "Engineering",
-    "Sciences fondamentales et applications": "Fundamental",
-    "Sciences de la Vie, de la santé, de la Terre et de l'Univers": "Life, Health & Earth",
-    "Plurisciences1": "Multidisciplinary",
-    "Universités - Santé": "Health",
-    "Médecine et odontologie": "Medicine & Dentistry",
-    "Pharmacie": "Pharmacy",
-    "Plurisanté (Paces et Pass2)": "Multidisciplinary Health",
-    "DUT - Spécialités de la production et de l'informatique": "DUT - Production & IT",
-    "Ensemble": "All Bachelor"
-}
-
-def get_gii_data():
-    df = pd.read_csv("data/raw/world_GII.csv")
-    return df
-
-def get_gii_long_format():
-    df = get_gii_data()
-    gii_columns = [col for col in df.columns if col.startswith("Gender Inequality Index")]
+class ProjectDataDownloader:    
+    def __init__(self, max_retries: int = 3, timeout: int = 30):
+        self.max_retries = max_retries
+        self.timeout = timeout
+        self.session = requests.Session()
+        self.session.headers.update({
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+        })
     
-    df_long = df.melt(
-        id_vars=["ISO3", "Country", "Continent"],
-        value_vars=gii_columns,
-        var_name="Year",
-        value_name="GII"
-    )
+    def download_file(self, url: str, output_path: Path, description: str = "") -> bool:
+        print(f"\nDownloading: {description}")
+        
+        for attempt in range(1, self.max_retries + 1):
+            try:
+                response = self.session.get(url, timeout=self.timeout, stream=True)
+                response.raise_for_status()
+                
+                output_path.parent.mkdir(parents=True, exist_ok=True)
+                
+                with open(output_path, 'wb') as f:
+                    for chunk in response.iter_content(chunk_size=8192):
+                        if chunk:
+                            f.write(chunk)
+
+                if output_path.exists() and output_path.stat().st_size > 0:
+                    print(f"OK - {output_path}")
+                    return True
+                
+            except Exception as e:
+                if attempt == self.max_retries:
+                    print(f"ERROR - {description}: {e}")
+                else:
+                    time.sleep(2 ** attempt)
+        
+        return False
     
-    df_long['Year'] = df_long['Year'].str.extract(r'(\d{4})').astype(int)
-    df_long = df_long.dropna(subset=['GII'])
-    
-    return df_long
-
-def get_stem_data():
-    df = pd.read_csv("data/raw/world_women_in_stem.csv")
-    
-    VALUE_COL = (
-        "Female share of graduates from Science, Technology, Engineering and Mathematics "
-        "(STEM) programmes, tertiary (%)"
-    )
-    
-    df = df.dropna(subset=[VALUE_COL])
-    df["Year"] = df["Year"].astype(int)
-    
-    return df
-
-def get_stem_filtered_years():
-    df = get_stem_data()
-    years = sorted(y for y in df["Year"].unique() if y not in (1998, 2019))
-    return years
-
-def get_world_boundaries():
-    world = gpd.read_file("data/cleaned/world_boundaries_simplified.geojson")
-    return world
-
-def get_world_geojson():
-    with open("data/cleaned/world_boundaries_simplified.geojson") as f:
-        return json.load(f)
-
-
-def get_iso3_to_name_mapping():
-    geojson = get_world_geojson()
-    return {
-        feature["properties"]["iso3"]: feature["properties"]["name"]
-        for feature in geojson["features"]
-    }
-
-def prepare_world_choropleth_data(df, value_col, years, iso_col='Code', entity_col='Entity'):
-    world = get_world_boundaries()
-
-    all_countries = world[['iso3']].copy()
-    all_years = pd.DataFrame({'Year': years})
-    all_combinations = all_countries.merge(all_years, how='cross')
-
-    merged_df = all_combinations.merge(
-        df,
-        left_on=['iso3', 'Year'],
-        right_on=[iso_col, 'Year'],
-        how='left'
-    )
-
-    merged_df[iso_col] = merged_df[iso_col].fillna(merged_df['iso3'])
-    merged_df['plot_iso'] = merged_df[iso_col]
-
-    real_min = df[value_col].min()
-    sentinel = real_min - (abs(real_min) * 0.1 + 0.01)
-
-    merged_df[f"{value_col}_plot"] = merged_df[value_col].fillna(sentinel)
-    merged_df[f"{value_col}_hover"] = merged_df[value_col].where(
-        merged_df[value_col].notna(),
-        "Unknown"
-    )
-
-    merged_df["Country_hover"] = merged_df[entity_col]
-    iso3_to_name = get_iso3_to_name_mapping()
-    
-    merged_df["Country_hover"] = merged_df.apply(
-        lambda row: iso3_to_name.get(row["plot_iso"])
-        if pd.isna(row["Country_hover"])
-        else row["Country_hover"],
-        axis=1
-    )
-    
-    return merged_df, sentinel
-
-def add_bins_to_dataframe(df, column, bins, labels):
-    df[f'{column}_Range'] = pd.cut(
-        df[column],
-        bins=bins,
-        labels=labels,
-        include_lowest=True
-    )
-    return df
-
-def get_fr_regions_data():
-    df = pd.read_csv("data/cleaned/fr_regions_gender_inequality_cleaned.csv")
-    return df
-
-def get_fr_departments_data():
-    df = get_fr_regions_data()
-    df_departments = df[~df['Region'].isin(REGION_NAMES_FR)].copy()
-    df_departments['Salary_Gap_2022_abs'] = df_departments['Salary_Gap_2022'].abs()
-    return df_departments
-
-def get_fr_geojson():
-    with open("data/raw/fr_departments.geojson") as f:
-        return json.load(f)
-
-def _parse_french_research_csv(filepath, discipline_translation):
-    with open(filepath, newline="", encoding="utf-8") as fichier:
-        lecteur = csv.reader(fichier)
-        lignes = list(lecteur)
-    
-    index_header = None
-    for i, ligne in enumerate(lignes):
-        if "2010-2011" in ligne and "2020-2021" in ligne:
-            index_header = i
-            break
-    
-    if index_header is None:
-        raise ValueError(f"Header not found in {filepath}")
-    
-    col_discipline = 0
-    col_2010 = lignes[index_header].index("2010-2011")
-    col_2020 = lignes[index_header].index("2020-2021")
-    
-    data = []
-    for ligne in lignes[index_header + 1:]:
+    def download_csv_from_xlsx_page(self, page_url: str, output_path: Path, 
+                                   description: str, figure_number: str, sheet_name=0) -> bool:
+        page_id = page_url.split('/')[5].split('?')[0]
+        xlsx_url = f"https://www.insee.fr/fr/statistiques/fichier/{page_id}/IREF_FH22-{figure_number}.xlsx"
+        
+        print(f"\nDownloading: {description}")
+        
+        temp_xlsx = output_path.parent / f"temp_{output_path.stem}.xlsx"
+        
         try:
-            if ligne[col_2010] and ligne[col_2020]:
-                data.append({
-                    "discipline": ligne[col_discipline],
-                    "2010-2011": float(ligne[col_2010]),
-                    "2020-2021": float(ligne[col_2020]),
-                })
-        except (ValueError, IndexError):
-            continue
+            response = self.session.get(xlsx_url, timeout=self.timeout)
+            response.raise_for_status()
+            
+            temp_xlsx.parent.mkdir(parents=True, exist_ok=True)
+            with open(temp_xlsx, 'wb') as f:
+                f.write(response.content)
+            
+            import pandas as pd
+            df = pd.read_excel(temp_xlsx, sheet_name=sheet_name, header=None)
+            df.to_csv(output_path, index=False, header=False, encoding='utf-8')
+            temp_xlsx.unlink()
+            
+            if output_path.exists() and output_path.stat().st_size > 0:
+                print(f"OK - {output_path}")
+                return True
+            
+        except Exception as e:
+            print(f"ERROR - {description}: {e}")
+            if temp_xlsx.exists():
+                temp_xlsx.unlink()
+            return False
     
-    df = pd.DataFrame(data)
-    df["discipline"] = df["discipline"].str.strip().replace(discipline_translation)
+
+def download_all_project_data():    
+    print("="*70)
+    print("DOWNLOADING DATA")
+    print("="*70)
     
-    return df
-
-def get_fr_phd_data():
-    return _parse_french_research_csv(
-        "data/raw/fr_research_women_feuille2.csv",
-        DISCIPLINE_TRANSLATION_PHD
+    downloader = ProjectDataDownloader()
+    results = {}
+    
+    stem_success = downloader.download_file(
+        url='https://ourworldindata.org/grapher/share-graduates-stem-female.csv',
+        output_path=Path('../../data/raw/world_women_in_stem.csv'),
+        description='World Women in STEM'
     )
+    results['world_women_in_stem'] = stem_success
+    time.sleep(1)
 
-def get_fr_university_data():
-    return _parse_french_research_csv(
-        "data/raw/fr_research_women_feuille1.csv",
-        DISCIPLINE_TRANSLATION_UNIVERSITY
+    boundaries_success = downloader.download_file(
+        url='https://raw.githubusercontent.com/datasets/geo-boundaries-world-110m/master/countries.geojson',
+        output_path=Path('../../data/raw/world_boundaries.geojson'),
+        description='World Boundaries'
     )
+    results['world_boundaries'] = boundaries_success
+    time.sleep(1)
+    
+    feuille1_success = downloader.download_csv_from_xlsx_page(
+        page_url='https://www.insee.fr/fr/statistiques/6047727?sommaire=6047805',
+        output_path=Path('../../data/raw/fr_research_women_feuille1.csv'),
+        description='INSEE Research Women Licence',
+        figure_number='F7',
+        sheet_name=1
+    )
+    results['fr_research_feuille1'] = feuille1_success
+    time.sleep(1)
+    
+    feuille2_success = downloader.download_csv_from_xlsx_page(
+        page_url='https://www.insee.fr/fr/statistiques/6047727?sommaire=6047805',
+        output_path=Path('../../data/raw/fr_research_women_feuille2.csv'),
+        description='INSEE Research Women Doctorat',
+        figure_number='F7',
+        sheet_name=2
+    )
+    results['fr_research_feuille2'] = feuille2_success
+    time.sleep(1)
+    
+    departments_success = downloader.download_file(
+        url='https://france-geojson.gregoiredavid.fr/repo/departements.geojson',
+        output_path=Path('../../data/raw/fr_departments.geojson'),
+        description='France Departements'
+    )
+    results['fr_departments'] = departments_success
+    
+    print("\n" + "="*70)
+    print("SUMMARY")
+    print("="*70)
+    
+    for name, success in results.items():
+        status = "OK" if success else "FAILED"
+        print(f"{status:10} - {name}")
+    
+    success_count = sum(1 for s in results.values() if s)
+    total_count = len(results)
+    
+    print(f"\nSuccess level: {success_count}/{total_count}")
+    
+    print("\n" + "="*70)
+    print("FILES TO DOWNLOAD BY HAND")
+    print("="*70)
+    print("\n1. world_GII.csv")
+    print("   https://www.kaggle.com/code/anoopjohny/gender-inequality-study")
+    print("   Place here: ../../data/raw/world_GII.csv")
+    
+    print("\n2. fr_regions_gender_inequality.xls")
+    print("   https://www.insee.fr/fr/statistiques/2513786")
+    print("   Place here: ../../data/raw/fr_regions_gender_inequality.xls")
+    print("\n" + "="*70)
+    
+    return results
+
+
+def main():
+    try:
+        import pandas as pd
+        import openpyxl
+    except ImportError:
+        print("Erreur: pip install pandas openpyxl requests")
+        return
+    
+    download_all_project_data()
+
+
+if __name__ == "__main__":
+    main()

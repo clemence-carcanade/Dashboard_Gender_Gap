@@ -1,7 +1,7 @@
 from dash import html, callback
 from dash.dependencies import Input, Output
 from src.components.segmented_control import create_segmented_control
-from src.utils.get_data import get_gii_long_format, get_stem_data
+from src.utils.prepare_data import get_gii_long_format, get_stem_data
 
 df_gii_long = get_gii_long_format()
 df_stem = get_stem_data()
