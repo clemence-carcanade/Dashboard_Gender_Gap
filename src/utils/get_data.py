@@ -151,13 +151,6 @@ def download_all_project_data():
 
 
 def main():
-    try:
-        import pandas as pd
-        import openpyxl
-    except ImportError:
-        print("Erreur: pip install pandas openpyxl requests")
-        return
-    
     download_all_project_data()
 
 
