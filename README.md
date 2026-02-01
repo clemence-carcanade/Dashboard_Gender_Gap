@@ -15,7 +15,7 @@ In VS Code:
 Once the virtual environment is created, run the ray tracer from the project root:
 
 ```bash
-python ray_tracer.py
+python main.py
 ```
 
 Use `Ctrl + Click` on the link int the terminal to open the dashboard in your default web browser.
@@ -121,10 +121,11 @@ DASHBOARD_GENDER_GAP
 │   ├── graphics/                  # Original chart scripts
 │   │
 │   └── utils/                     # Utility functions
+│       ├── chart.py               # Chart templates
 │       ├── get_data.py            # Data loading
 │       └── clean_data.py          # Data cleaning
 │
-├── config.py                      # Configuration settings
+├── config.py                      # Environment variables
 ├── main.py                        # Dashboard entry point
 ├── requirements.txt               # Project dependencies
 ├── README.md                      # Documentation
@@ -133,7 +134,7 @@ DASHBOARD_GENDER_GAP
 ## Adding a new chart
 
 1. Create a new Python file in `DASHBOARD_GENDER_GAP/src/charts`
-2. Define a `layout` function
+2. Define a `layout` function and use `chart.py`to define your figure
 3. Import this function into the `home.py` page
 ```python
 from src.charts.your_chart import layout as your_chart_layout
@@ -180,15 +181,15 @@ We hereby declare that the code provided in this project was produced by us, exc
 
 ### Borrowed code 
 
-In `gii_world_map.py`, and reused in other charts:
+In `get_data.py` :
  
 Source: ChatGPT
 
 Explanation: These lines extract the year from column names and convert it to the appropriate data type.
 
 ```python
-gii_columns = [c for c in df.columns if c.startswith("Gender Inequality Index")]
-
+gii_columns = [col for col in df.columns if col.startswith("Gender Inequality Index")]
+    
 df_long = df.melt(
     id_vars=["ISO3", "Country", "Continent"],
     value_vars=gii_columns,
@@ -196,7 +197,7 @@ df_long = df.melt(
     value_name="GII"
 )
 
-df_long["Year"] = df_long["Year"].str.extract(r"(\d{4})").astype(int)
+df_long['Year'] = df_long['Year'].str.extract(r'(\d{4})').astype(int)
 ```
 
 Source: ChatGPT
@@ -204,42 +205,42 @@ Source: ChatGPT
 Explanation: These lines replace missing values with a very small sentinel value in order to display them in grey on the map.
 
 ```python
-real_min = df_long["GII"].min(skipna=True)
+real_min = df[value_col].min()
 sentinel = real_min - (abs(real_min) * 0.1 + 0.01)
-
-merged_df["GII_plot"] = merged_df["GII"].fillna(sentinel)
 ```
 
-Source: ChatGPT
-
-Explanation: These lines adjust the border thickness of countries on the map.
-
-```python
-fig.update_traces(marker_line_color="#DDDDDD", marker_line_width=0.9)
-fig.update_geos(fitbounds="locations", visible=False)
-```
-
-Source: ChatGPT
+Source: Claude.ia
 
 Explanation: These lines remove sentinel value by Unknown when no data is available and displays the name of the country when hover.
 
 ```python
-merged_df["GII_hover"] = merged_df["GII"].where(
-    merged_df["GII"].notna(),
+merged_df[f"{value_col}_plot"] = merged_df[value_col].fillna(sentinel)
+merged_df[f"{value_col}_hover"] = merged_df[value_col].where(
+    merged_df[value_col].notna(),
     "Unknown"
 )
 
-merged_df["Country_hover"] = merged_df["Country"]
-
-iso3_to_name = {
-    feature["properties"]["iso3"]: feature["properties"]["name"]
-    for feature in world_geojson["features"]
-}
+merged_df["Country_hover"] = merged_df[entity_col]
+iso3_to_name = get_iso3_to_name_mapping()
 
 merged_df["Country_hover"] = merged_df.apply(
     lambda row: iso3_to_name.get(row["plot_iso"])
     if pd.isna(row["Country_hover"])
     else row["Country_hover"],
     axis=1
+)
+```
+
+In `chart.py` :
+
+Source: ChatGPT
+
+Explanation: These lines adjust the border thickness of countries on the map.
+
+```python
+fig.update_traces(
+    marker_line_color="#DDDDDD",
+    marker_line_width=0.9,
+    hovertemplate=hover_template
 )
 ```
