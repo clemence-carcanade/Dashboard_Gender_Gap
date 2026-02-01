@@ -1,9 +1,7 @@
 #IMPORT
 import dash
 import plotly.express as px
-from dash import Dash, Input, Output, State, html, dcc, ctx
-import geopandas as gpd
-import json
+from dash import Input, Output, html, dcc
 import pandas as pd
 
 df = pd.read_csv("../../../data/raw/share-graduates-stem-female.csv")

@@ -1,9 +1,7 @@
 #IMPORT
 import dash
 import plotly.express as px
-from dash import Dash, Input, Output, html, dcc
-import geopandas as gpd
-import json
+from dash import Input, Output, html, dcc
 import pandas as pd
 import csv
 

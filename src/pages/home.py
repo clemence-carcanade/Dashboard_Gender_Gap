@@ -184,7 +184,7 @@ def update_visualization(data_type, view_type):
     if data_type == "Gender Inequality Index":
         if view_type == "🌍 Map":
             return html.Div(
-                className="world_container",
+                className="main_data_container",
                 children=[
                     gii_map_layout(),
                     board_layout("gii"),
@@ -192,7 +192,7 @@ def update_visualization(data_type, view_type):
             )
         else:
             return html.Div(
-                className="world_container",
+                className="main_data_container",
                 children=[
                     gii_bar_layout(),
                     board_layout("gii"),
@@ -201,7 +201,7 @@ def update_visualization(data_type, view_type):
     else:
         if view_type == "🌍 Map":
             return html.Div(
-                className="world_container",
+                className="main_data_container",
                 children=[
                     stem_map_layout(),
                     board_layout("stem"),
@@ -209,7 +209,7 @@ def update_visualization(data_type, view_type):
             )
         else:
             return html.Div(
-                className="world_container",
+                className="main_data_container",
                 children=[
                     stem_bars_layout(),
                     board_layout("stem"),
@@ -225,7 +225,7 @@ def update_visualization_france(data_type, view_type):
 
     if view_type == "🌍 Map":
         return html.Div(
-            className="world_container",
+            className="main_data_container",
             children=[
                 education_map_layout(data_type),
                 fr_board_layout()
@@ -234,7 +234,7 @@ def update_visualization_france(data_type, view_type):
 
     else:  # 📊 Bars
         return html.Div(
-            className="world_container",
+            className="main_data_container",
             children=[
                 education_bars_layout(data_type),
                 fr_board_layout()

@@ -1,19 +1,9 @@
 from dash import html, callback
 from dash.dependencies import Input, Output
-import pandas as pd
 from src.components.segmented_control import create_segmented_control
+from src.utils.prepare_data import get_fr_departments_data
 
-df = pd.read_csv("data/cleaned/fr_regions_gender_inequality_cleaned.csv")
-
-REGION_NAMES = ['Île-de-France', 'Centre-Val de Loire', 'Bourgogne-Franche-Comté', 
-                'Normandie', 'Hauts-de-France', 'Grand Est', 'Pays de la Loire', 
-                'Bretagne', 'Nouvelle-Aquitaine', 'Occitanie', 'Auvergne-Rhône-Alpes',
-                'Provence-Alpes-Côte d\'Azur', 'Corse', 'France métropolitaine hors Ile-de-France',
-                'France métropolitaine', 'Guadeloupe', 'Martinique', 'Guyane', 'La Réunion',
-                'DROM hors Mayotte', 'France hors Mayotte']
-
-df_departments = df[~df['Region'].isin(REGION_NAMES)].copy()
-df_departments['Salary_Gap_2022_abs'] = df_departments['Salary_Gap_2022'].abs()
+df_departments = get_fr_departments_data()
 
 def layout():
     return html.Div(
@@ -68,6 +58,18 @@ def toggle_france_display(selected):
     else:
         return {"display": "none"}, {"display": "block"}
 
+def _create_ranking_items(df_sorted, value_column):
+    return [
+        html.Li(
+            className="ranking_item",
+            children=[
+                html.Span(f"{i+1}.", className="ranking_rank"),
+                html.Span(row['Region'], className="ranking_country"),
+                html.Span(f"{row[value_column]:.1f}%", className="ranking_value"),
+            ]
+        ) for i, row in df_sorted.iterrows()
+    ]
+
 @callback(
     [Output("title_leaders_france", "children"),
      Output("title_lowest_france", "children"),
@@ -80,92 +82,51 @@ def toggle_france_display(selected):
 )
 def update_france_rankings(metric, _):
     if metric == "Disparity in Education":
-        # EDUCATION (2021)
         title_leaders = "Departments with Highest Women's Share in Higher Education"
         title_lowest = "Departments with Lowest Women's Share in Higher Education"
         year_str = "2021"
-        
+        column = "Education_Gap_2021"
+
         df_leaders = (
             df_departments
-            .dropna(subset=["Education_Gap_2021"])
-            .sort_values("Education_Gap_2021", ascending=False)
+            .dropna(subset=[column])
+            .sort_values(column, ascending=False)
             .head(10)
             .reset_index(drop=True)
         )
-        
+
         df_lowest = (
             df_departments
-            .dropna(subset=["Education_Gap_2021"])
-            .sort_values("Education_Gap_2021")
+            .dropna(subset=[column])
+            .sort_values(column, ascending=True)
             .head(10)
             .reset_index(drop=True)
         )
         
-        ranking_leaders = [
-            html.Li(
-                className="ranking_item",
-                children=[
-                    html.Span(f"{i+1}.", className="ranking_rank"),
-                    html.Span(row['Region'], className="ranking_country"),
-                    html.Span(f"{row['Education_Gap_2021']:.1f}%", className="ranking_value"),
-                ]
-            ) for i, row in df_leaders.iterrows()
-        ]
-        
-        ranking_lowest = [
-            html.Li(
-                className="ranking_item",
-                children=[
-                    html.Span(f"{i+1}.", className="ranking_rank"),
-                    html.Span(row['Region'], className="ranking_country"),
-                    html.Span(f"{row['Education_Gap_2021']:.1f}%", className="ranking_value"),
-                ]
-            ) for i, row in df_lowest.iterrows()
-        ]
-        
     else:  # "Wage Inequality"
-        # SALARY (2022)
         title_leaders = "Departments with Smallest Gender Pay Gap"
         title_lowest = "Departments with Largest Gender Pay Gap"
         year_str = "2022"
+        column = "Salary_Gap_2022_abs"
         
         df_leaders = (
             df_departments
-            .dropna(subset=["Salary_Gap_2022_abs"])
-            .sort_values("Salary_Gap_2022_abs")
+            .dropna(subset=[column])
+            .sort_values(column, ascending=True)
             .head(10)
             .reset_index(drop=True)
         )
         
         df_lowest = (
             df_departments
-            .dropna(subset=["Salary_Gap_2022_abs"])
-            .sort_values("Salary_Gap_2022_abs", ascending=False)
+            .dropna(subset=[column])
+            .sort_values(column, ascending=False)
             .head(10)
             .reset_index(drop=True)
         )
-        
-        ranking_leaders = [
-            html.Li(
-                className="ranking_item",
-                children=[
-                    html.Span(f"{i+1}.", className="ranking_rank"),
-                    html.Span(row['Region'], className="ranking_country"),
-                    html.Span(f"{row['Salary_Gap_2022_abs']:.1f}%", className="ranking_value"),
-                ]
-            ) for i, row in df_leaders.iterrows()
-        ]
-        
-        ranking_lowest = [
-            html.Li(
-                className="ranking_item",
-                children=[
-                    html.Span(f"{i+1}.", className="ranking_rank"),
-                    html.Span(row['Region'], className="ranking_country"),
-                    html.Span(f"{row['Salary_Gap_2022_abs']:.1f}%", className="ranking_value"),
-                ]
-            ) for i, row in df_lowest.iterrows()
-        ]
+    
+    ranking_leaders = _create_ranking_items(df_leaders, column)
+    ranking_lowest = _create_ranking_items(df_lowest, column)
     
     return (
         title_leaders,
