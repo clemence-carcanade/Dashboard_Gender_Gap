@@ -134,14 +134,6 @@ def main():
     print("="*70)
     print("CLEANING DATA")
     print("="*70)
-    
-    try:
-        import xlrd
-    except ImportError:
-        print("\nERROR: xlrd is required for reading .xls files")
-        print("Install with: pip install xlrd")
-        return
-    
     results = {}
     
     try:

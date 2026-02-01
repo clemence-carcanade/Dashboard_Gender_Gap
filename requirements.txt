@@ -3,6 +3,3 @@ numpy
 pandas
 geopandas
 plotly
-openpyxl
-kaggle
-xlrd
