@@ -32,7 +32,7 @@ zmax = df[VALUE_COL].max()
 
 def layout():
     return html.Div(
-        className="world_data_container",
+        className="data_container",
         children=[
             dcc.Graph(
                 id="stem_histogram",

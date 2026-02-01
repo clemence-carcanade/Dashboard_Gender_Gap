@@ -146,7 +146,7 @@ def education_map_layout(metric):
     fig = create_choropleth(metric)
 
     return html.Div(
-        className="world_data_container",
+        className="data_container",
         children=[
             dcc.Graph(
                 figure=fig,

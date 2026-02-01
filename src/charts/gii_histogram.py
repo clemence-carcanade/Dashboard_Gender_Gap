@@ -38,7 +38,7 @@ zmax = df_long["GII"].max()
 
 def layout():
     return html.Div(
-        className="world_data_container",
+        className="data_container",
         children=[
             create_segmented_control(
                 className="segmented_control small middle",

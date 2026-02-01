@@ -55,7 +55,7 @@ def education_bars_layout(metric):
     fig = create_bar_figure(metric)
 
     return html.Div(
-        className="world_data_container",
+        className="data_container",
         children=[
             dcc.Graph(
                 figure=fig,
