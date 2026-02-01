@@ -1,7 +1,7 @@
 #IMPORT
 import dash
 import plotly.express as px
-from dash import Dash, Input, Output, html, dcc
+from dash import Input, Output, html, dcc
 import geopandas as gpd
 import json
 import pandas as pd
@@ -100,7 +100,7 @@ def update_map(selected_year):
     #afin de plus tard créer une valeur artificielle encore plus petite pour faire apparaître les pays grisé
     #même principe pour les valeurs max
     real_min = df_long['GII'].min(skipna=True)
-    real_max = df_long['GII'].max(skipna=True)
+    #real_max = df_long['GII'].max(skipna=True)
     #on prends la plus petitre valeur réelle et on descend légèrement en dessous
     sentinel = real_min - (abs(real_min) * 0.1 + 0.01) 
     #on créer une nouvelle version : tous les NaN sont remplacés par des sentinels pour au final retirer tous les NaN

@@ -3,7 +3,7 @@ import pandas as pd
 import geopandas as gpd
 import plotly.express as px
 from dash import html, dcc, callback
-from dash.dependencies import Input, Output, State
+from dash.dependencies import Input, Output
 from src.charts.slider import create_slider
 from src.components.segmented_control import create_segmented_control
 
