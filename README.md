@@ -12,9 +12,15 @@ In VS Code:
 5. Choose a Python version
 6. Check `requirements.txt`
 
-Once the virtual environment is created, run the ray tracer from the project root:
+Once the virtual environment is created, run the dashboard from the project root:
 
 ```bash
+#optionnal: download all datasets from web
+cd src/utils
+python get_data.py
+python clean_data.py
+
+#from the project root:
 python main.py
 ```
 
@@ -38,13 +44,7 @@ The data for the **Gender Inequality Index (GII)** at the global level comes fro
 <br>For women in **STEM (Science, Technology, Engineering, and Mathematics) worldwide**, the data was sourced from *ourworldindata.org* : https://ourworldindata.org/grapher/share-graduates-stem-female
 
 Both covers the period from 1999 to 2018 and are stored in CSV files.
-To build the visualizations, we used:
-- ISO3 country codes
-- country names
-- continents
-- years
-- yearly GII values
-- percentage of women in STEM fields
+To build the visualizations, we used ISO3 country codes.
 
 The GII values were originally spread across multiple columns, one per year. To make the data usable for analysis and visualization, the dataset was reshaped into a long format by extracting the year from each column and associating it with the corresponding GII value.
 
@@ -53,10 +53,13 @@ Those datasets allowed us to observe long-term global trends.
 ### French data
 
 The two charts related to **education gap (2021) and wage gap (2022) in France** use data from *insee.fr* : https://www.insee.fr/fr/statistiques/2513786#consulter
-<br>The original data was provided in XLSX format. Since standard online converters did not produce correct results, we used *claude.ai* to convert the files into CSV format.
+<br>Similarly, the **two histograms showing women’s fields of study in France** also come from *insee.fr* : https://www.insee.fr/fr/statistiques/6047727?sommaire=6047805#
 
-Similarly, the **two histograms showing women’s fields of study in France** also come from *insee.fr* : https://www.insee.fr/fr/statistiques/6047727?sommaire=6047805#
-<br>These datasets were originally in XLSX format and were converted to CSV using an online converter. The dataset corresponds to the academic years 2010–2011 and 2020–2021.
+### GeoJSON
+
+All geolocalized data requires boundary GeoJSON files:
+- World boundaries (countries): https://public.opendatasoft.com/explore/assets/world-administrative-boundaries/export/
+- France boundaries (departments): https://france-geojson.gregoiredavid.fr/
 
 # Developer Guide
 
@@ -122,10 +125,12 @@ DASHBOARD_GENDER_GAP
 │   │
 │   └── utils/                     # Utility functions
 │       ├── chart.py               # Chart templates
+│       ├── clean_data.py          # Data cleaning
 │       ├── get_data.py            # Data loading
-│       └── clean_data.py          # Data cleaning
+│       └── prepare_data.py        # Data functions redundant
 │
 ├── config.py                      # Environment variables
+├── Gender_Gap_Demo.mp4            # Video demonstration of the dashboard
 ├── main.py                        # Dashboard entry point
 ├── requirements.txt               # Project dependencies
 ├── README.md                      # Documentation
@@ -244,3 +249,5 @@ fig.update_traces(
     hovertemplate=hover_template
 )
 ```
+
+Both `clean_data.py`and `get_data.py`where made with Claude.ia
