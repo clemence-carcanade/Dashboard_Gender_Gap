@@ -148,7 +148,7 @@ from src.charts.your_chart import layout as your_chart_layout
 ```python
 from src.pages.your_page import layout as your_page_layout
 ```
-4. Add your page to `display_page`function:
+4. Add your page to `display_page` function:
 ```python
 elif pathname == "/your_page":
     return your_page_layout()
@@ -161,20 +161,15 @@ The data analysis highlights several key aspects of gender equality worldwide an
 ## International analysis 
 
 - GII data shows that wealthier countries tend to have lower levels of gender inequality, while poorer countries experience higher inequality.
-
 - Surprisingly, countries with higher gender inequality often show a higher proportion of women in STEM fields.
 In countries such as Niger or Tunisia, STEM careers appear to be a pathway for women to achieve social mobility.
-
 - In contrast, countries like Switzerland show low gender inequality overall, but also a low proportion of women in STEM fields, suggesting the persistence of cultural stereotypes.
 
 ## France analysis 
 
 - Overall, education gap data shows that women tend to pursue higher levels of education than men, yet receive lower salaries.
-
 - Wage gaps are smaller in departments without major metropolitan areas and in regions dominated by public sector employment, where standardized pay scales reduce inequality.
-
 - In large metropolitan areas such as Paris, wage gaps are more pronounced, largely due to private sector practices.
-
 - The histograms reveal another important pattern:
 although women pursue higher education in large numbers, they tend to concentrate in fields such as humanities and social sciences.
 These sectors are less impacted by technological innovation, which may reduce women’s access to high-level positions and long-term influence.
@@ -185,45 +180,66 @@ We hereby declare that the code provided in this project was produced by us, exc
 
 ### Borrowed code 
 
-- Lines 8–17 of gii_board.py and lines 16–25 of `gii_world_map.py`
+In `gii_world_map.py`, and reused in other charts:
  
-    Source: ChatGPT
- 
-    Explanation: These lines extract the year from column names and convert it to the appropriate data type.
+Source: ChatGPT
 
-  ```python
-  gii_columns = [c for c in df.columns if c.startswith("Gender Inequality Index")]
+Explanation: These lines extract the year from column names and convert it to the appropriate data type.
 
-    df_long = df.melt(
-        id_vars=["ISO3", "Country", "Continent"],
-        value_vars=gii_columns,
-        var_name="Year",
-        value_name="GII"
-    )
+```python
+gii_columns = [c for c in df.columns if c.startswith("Gender Inequality Index")]
 
-    df_long["Year"] = df_long["Year"].str.extract(r"(\d{4})").astype(int)
-    ```
-- Lines 42–45 of `gii_world_map.py`
-    
-    Source: ChatGPT
-    
-    Explanation: These lines replace missing values with a very small sentinel value in order to display them in grey on the map.
+df_long = df.melt(
+    id_vars=["ISO3", "Country", "Continent"],
+    value_vars=gii_columns,
+    var_name="Year",
+    value_name="GII"
+)
 
-    ```python
-    real_min = df_long["GII"].min(skipna=True)
-    sentinel = real_min - (abs(real_min) * 0.1 + 0.01)
+df_long["Year"] = df_long["Year"].str.extract(r"(\d{4})").astype(int)
+```
 
-    merged_df["GII_plot"] = merged_df["GII"].fillna(sentinel)
-    ```
-- Lines 75–76 of `gii_world_map.py`
+Source: ChatGPT
 
-    Source: ChatGPT
+Explanation: These lines replace missing values with a very small sentinel value in order to display them in grey on the map.
 
-    Explanation: These lines adjust the border thickness of countries on the map.
+```python
+real_min = df_long["GII"].min(skipna=True)
+sentinel = real_min - (abs(real_min) * 0.1 + 0.01)
 
-    ```python
-    fig.update_traces(marker_line_color="#DDDDDD", marker_line_width=0.9)
-    fig.update_geos(fitbounds="locations", visible=False)
-    ```
+merged_df["GII_plot"] = merged_df["GII"].fillna(sentinel)
+```
 
+Source: ChatGPT
 
+Explanation: These lines adjust the border thickness of countries on the map.
+
+```python
+fig.update_traces(marker_line_color="#DDDDDD", marker_line_width=0.9)
+fig.update_geos(fitbounds="locations", visible=False)
+```
+
+Source: ChatGPT
+
+Explanation: These lines remove sentinel value by Unknown when no data is available and displays the name of the country when hover.
+
+```python
+merged_df["GII_hover"] = merged_df["GII"].where(
+    merged_df["GII"].notna(),
+    "Unknown"
+)
+
+merged_df["Country_hover"] = merged_df["Country"]
+
+iso3_to_name = {
+    feature["properties"]["iso3"]: feature["properties"]["name"]
+    for feature in world_geojson["features"]
+}
+
+merged_df["Country_hover"] = merged_df.apply(
+    lambda row: iso3_to_name.get(row["plot_iso"])
+    if pd.isna(row["Country_hover"])
+    else row["Country_hover"],
+    axis=1
+)
+```
