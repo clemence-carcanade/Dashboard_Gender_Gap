@@ -1,100 +1,50 @@
-import json
-import pandas as pd
-import geopandas as gpd
-import plotly.express as px
 from dash import html, dcc, callback
 from dash.dependencies import Input, Output
 from src.components.segmented_control import create_segmented_control
 from src.charts.slider import create_slider
 from config import COLORSCALE_BLUE
+from src.utils.get_data import get_stem_data, get_stem_filtered_years, get_world_geojson, prepare_world_choropleth_data
+from src.utils.chart import create_world_choropleth, update_projection
 
-df = pd.read_csv("data/raw/world_women_in_stem.csv")
-world = gpd.read_file("data/cleaned/world_boundaries_simplified.geojson")
+VALUE_COL = ("Female share of graduates from Science, Technology, Engineering and Mathematics (STEM) programmes, tertiary (%)")
 
-with open("data/cleaned/world_boundaries_simplified.geojson") as f:
-    world_geojson = json.load(f)
+df = get_stem_data()
+years = get_stem_filtered_years()
+geojson = get_world_geojson()
 
-VALUE_COL = (
-    "Female share of graduates from Science, Technology, Engineering and Mathematics (STEM) programmes, tertiary (%)"
-)
-
-df = df.dropna(subset=[VALUE_COL])
-df["Year"] = df["Year"].astype(int)
-
-years = sorted(y for y in df["Year"].unique() if y not in (1998, 2019))
-
-all_countries = world[['iso3']].copy()
-all_years = pd.DataFrame({'Year': years})
-all_combinations = all_countries.merge(all_years, how='cross')
-
-merged_df = all_combinations.merge(
-    df,
-    left_on=['iso3', 'Year'],
-    right_on=['Code', 'Year'],
-    how='left'
-)
-
-merged_df['Code'] = merged_df['Code'].fillna(merged_df['iso3'])
-merged_df['plot_iso'] = merged_df['Code']
-
-real_min = df[VALUE_COL].min()
-sentinel = real_min - (abs(real_min) * 0.1 + 0.01)
-
-merged_df["STEM_plot"] = merged_df[VALUE_COL].fillna(sentinel)
-
-merged_df["STEM_hover"] = merged_df[VALUE_COL].where(
-    merged_df[VALUE_COL].notna(),
-    "Unknown"
-)
-
-merged_df["Country_hover"] = merged_df["Entity"]
-
-iso3_to_name = {
-    feature["properties"]["iso3"]: feature["properties"]["name"]
-    for feature in world_geojson["features"]
-}
-
-merged_df["Country_hover"] = merged_df.apply(
-    lambda row: iso3_to_name.get(row["plot_iso"])
-    if pd.isna(row["Country_hover"])
-    else row["Country_hover"],
-    axis=1
+merged_df, sentinel = prepare_world_choropleth_data(
+    df=df,
+    value_col=VALUE_COL,
+    years=years,
+    iso_col='Code',
+    entity_col='Entity'
 )
 
 zmin = sentinel
-zmax = merged_df["STEM_plot"].max()
+zmax = merged_df[f"{VALUE_COL}_plot"].max()
 
-def create_choropleth(df_year):
-    fig = px.choropleth(
-        df_year,
-        geojson=world_geojson,
-        locations="plot_iso",
-        color="STEM_plot",
-        hover_name="Country_hover",
-        hover_data=["plot_iso", "STEM_hover"],
+def create_stem_choropleth(df_year):
+    return create_world_choropleth(
+        df=df_year,
+        geojson=geojson,
+        locations_col="plot_iso",
+        color_col=f"{VALUE_COL}_plot",
+        hover_name_col="Country_hover",
+        hover_data_cols=["plot_iso", f"{VALUE_COL}_hover"],
         featureidkey="properties.iso3",
-        projection="natural earth",
-        color_continuous_scale=COLORSCALE_BLUE,
+        colorscale=COLORSCALE_BLUE,
         range_color=(zmin, zmax),
-    )
-
-    fig.update_traces(
-        marker_line_color="#DDDDDD", 
-        marker_line_width=0.9, 
-        hovertemplate=
+        colorbar_title="Women in<br>STEM (%)",
+        hover_template=(
             "<b>%{hovertext}</b><br>"
             "ISO3: %{customdata[0]}<br>"
             "STEM (%): %{customdata[1]}<extra></extra>"
+        ),
+        projection="natural earth",
     )
-    fig.update_geos(fitbounds="locations", visible=False)
-    fig.update_layout(
-        margin=dict(l=0, r=0, t=0, b=0),
-        coloraxis_colorbar=dict(title="Women in<br>STEM (%)"),
-    )
-    return fig
 
 figs_by_year = {
-    y: create_choropleth(merged_df[merged_df["Year"] == y])
+    y: create_stem_choropleth(merged_df[merged_df["Year"] == y])
     for y in years
 }
 
@@ -123,11 +73,8 @@ def layout():
 )
 def update_stem_map(year_selected, earth_selected):
     fig = figs_by_year[year_selected]
-
-    fig.update_geos(
-        projection_type="natural earth"
-        if earth_selected == "Plan"
-        else "orthographic"
-    )
-
+    
+    projection_type = "natural earth" if earth_selected == "Plan" else "orthographic"
+    update_projection(fig, projection_type)
+    
     return fig

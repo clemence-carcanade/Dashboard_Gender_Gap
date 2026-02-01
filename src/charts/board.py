@@ -1,27 +1,14 @@
 from dash import html, callback
 from dash.dependencies import Input, Output
-import pandas as pd
 from src.components.segmented_control import create_segmented_control
+from src.utils.get_data import get_gii_long_format, get_stem_data
 
-# Charger les deux datasets
-df_gii = pd.read_csv("data/raw/world_GII.csv")
-df_stem = pd.read_csv("data/raw/world_women_in_stem.csv")
+df_gii_long = get_gii_long_format()
+df_stem = get_stem_data()
 
-# Préparer GII
-gii_columns = [c for c in df_gii.columns if c.startswith("Gender Inequality Index")]
-df_gii_long = df_gii.melt(
-    id_vars=["ISO3", "Country", "Continent"],
-    value_vars=gii_columns,
-    var_name="Year",
-    value_name="GII"
-)
-df_gii_long["Year"] = df_gii_long["Year"].str.extract(r"(\d{4})").astype(int)
-
-# Préparer STEM
-VALUE_COL = "Female share of graduates from Science, Technology, Engineering and Mathematics (STEM) programmes, tertiary (%)"
-df_stem = df_stem.dropna(subset=[VALUE_COL])
-df_stem["Year"] = df_stem["Year"].astype(int)
 df_stem = df_stem[~df_stem["Year"].isin([1998, 2019])]
+
+VALUE_COL = "Female share of graduates from Science, Technology, Engineering and Mathematics (STEM) programmes, tertiary (%)"
 
 def layout(data_type="gii"):
     if data_type == "gii":
@@ -76,7 +63,6 @@ def layout(data_type="gii"):
         ]
     )
 
-# Callbacks pour GII
 @callback(
     [Output("leaders_section_gii", "style"),
      Output("lowest_section_gii", "style")],
@@ -147,7 +133,6 @@ def update_gii_year(year_selected):
     year_str = str(year_selected)
     return year_str, year_str
 
-# Callbacks pour STEM
 @callback(
     [Output("leaders_section_stem", "style"),
      Output("lowest_section_stem", "style")],
@@ -192,6 +177,12 @@ def update_stem_lowest(year_selected):
     df_year = (
         df_stem[df_stem["Year"] == year_selected]
         .dropna(subset=[VALUE_COL])
+    )
+    
+    df_year = df_year[df_year[VALUE_COL] > 0]
+    
+    df_year = (
+        df_year
         .sort_values(VALUE_COL)
         .head(10)
         .reset_index(drop=True)
